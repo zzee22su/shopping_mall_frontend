@@ -22,6 +22,12 @@
 </form>
 </template>
 
+<script>
+export default {
+
+}
+</script>
+
 <style>
       #login {
         width: 600px;

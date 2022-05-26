@@ -1,14 +1,19 @@
 <template>
-  <div class="home">
-    <h1>This is an home page</h1>
+  <div>
+    <Category/>
   </div>
 </template>
 
 <script>
+import Category from '@/components/Category.vue'
 
 
 export default {
-  name: 'HomeView',
-
+  components: { Category },
+  name: 'HomeView'
 }
 </script>
+
+<style scoped>
+
+</style>

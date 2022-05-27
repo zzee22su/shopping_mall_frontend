@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import loginApi from '@/api/LoginApi';
+
 export default {
 
   data() {
@@ -54,11 +56,13 @@ export default {
           this.checkPass = '';
           this.loginMsg='';
           const loginInfo = {
-              id : this.inputEmail,
-              pass : this.inputPass,
+              email : this.inputEmail,
+              password : this.inputPass,
             }
             console.log(loginInfo);
-        }
+            const restult = loginApi.login(loginInfo);
+            console.log(restult);
+        }        
         console.log("...........login....end... ");
 
       },

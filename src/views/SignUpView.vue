@@ -84,7 +84,7 @@
 
 <script>
 
-//import SignUpApi from '@/api/SignUpApi.js';
+import SignUpApi from '@/api/SignUpApi.js';
 import WindowPopup  from '../components/PopupView.vue';
 import CryptoJS from "crypto-js";
 
@@ -159,6 +159,7 @@ export default {
         console.log("onSubmitSignUp");
         this.passSHA256();
         console.log("passSHA256");
+
         if (!this.inputName) {
           this.popupbody = "이름란이 비었습니다. 이름을 입력해주세요."
           this.handleClickButton();
@@ -172,15 +173,17 @@ export default {
 
         } else {
           const body = {
-            id : this.inputId,
-            pass : this.inputPass,
+            email : this.inputId,
+            password : this.inputPass,
             name : this.inputName,
-            phonenumber : this.inputPhoneNumber,
+            phoneNumber : this.inputPhoneNumber,
             address : "("+this.postcode+")" +this.inputAddress + this.extraAddress,
           }
           console.log(JSON.stringify(body));
-          //const bodyForm = new FormData();
-          //bodyForm.append('userInfo', JSON.stringify(body));
+          
+          const bodyForm = new FormData();
+          bodyForm.append('userInfo', JSON.stringify(body));
+          SignUpApi.signUp(body);
           
         }
       },
@@ -245,6 +248,7 @@ export default {
 </script>
 
 <style>
+
       #signup {
         width: 800px;
         margin: auto;

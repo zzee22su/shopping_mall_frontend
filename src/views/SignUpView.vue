@@ -86,6 +86,9 @@
 
 //import SignUpApi from '@/api/SignUpApi.js';
 import WindowPopup  from '../components/PopupView.vue';
+import CryptoJS from "crypto-js";
+
+
 export default {
   data() {
     return {
@@ -94,7 +97,6 @@ export default {
       checkPass:false,
       passcheckResult:'*',
       nameCheck:'',
-      phoneNumberCheck:'',
       addressCheck:'',
       visible: false,
       popupbody:'',
@@ -154,6 +156,9 @@ export default {
      },
       onSubmitSignUp(e) {
         e.preventDefault();
+        console.log("onSubmitSignUp");
+        this.passSHA256();
+        console.log("passSHA256");
         if (!this.inputName) {
           this.popupbody = "이름란이 비었습니다. 이름을 입력해주세요."
           this.handleClickButton();
@@ -183,6 +188,14 @@ export default {
       handleClickButton() {
       this.visible = !this.visible;
     },
+    passSHA256() {
+      var cipherText = CryptoJS.AES.encrypt(
+          "my message",
+            "secretkey123"
+          ).toString();
+        console.log(cipherText);
+    },
+
     execDaumPostcode() {
        new window.daum.Postcode({
         oncomplete: (data) => {
@@ -238,6 +251,7 @@ export default {
       }
       label {
         text-align: left;
+        font-size: 12px;
       }
       #idCheck {
         color: red;

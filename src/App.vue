@@ -44,6 +44,7 @@
 nav {
   text-align: right;
   padding: 30px;
+  font-size: 13px;
 }
 
 nav a {

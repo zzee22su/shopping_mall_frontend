@@ -38,12 +38,16 @@ export default {
       inputPass :'',
       loginMsg :'',
       checkPass:'',
+      accessToken:'',
+      refreshToken:'',
+      isLogin: false,
+
     }
   },
 
 
   methods : {
-      startLogin(e) {
+     async startLogin(e) {
          e.preventDefault();
         console.log("startLogin");
         if (!this.inputEmail) {
@@ -60,12 +64,29 @@ export default {
               password : this.inputPass,
             }
             console.log(loginInfo);
-            const restult = loginApi.login(loginInfo);
-            console.log(restult);
-        }        
-        console.log("...........login....end... ");
+            let response = await loginApi.login(loginInfo);
+            console.log(response);
 
+            if (response.data.statusCode === 200) {
+              this.accessToken =  response.data.data.accessToken;
+              this.refreshToken = response.data.data.refreshToken;
+              sessionStorage.setItem("accessToken", this.accessToken);
+              sessionStorage.setItem("refreshToken", this.refreshToken);
+              console.log(" this.accessToken : " +  sessionStorage.getItem("accessToken"));
+              console.log(" this.refreshToken : " +  sessionStorage.getItem("refreshToken"));
+              this.isLogin = true;
+              // 메인 페이지로 이동 해야 할거 같은데............
+              this.changeLoginState();
+              this.$router.replace('home');              
+            } else {
+              sessionStorage.clear();
+              this.isLogin = false;
+              this.changeLoginState();
+            }
+            
+        }        
       },
+
   }
 }
 </script>

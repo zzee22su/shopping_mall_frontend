@@ -1,8 +1,9 @@
 <template>
   <div id="app">
     <nav>
-      <router-link to="/signup">회원가입</router-link> |
-      <router-link to="/login">로그인</router-link> |
+      <router-link to="/signup" v-if="true" id="signup">회원가입</router-link> |
+      <router-link to="/login"  v-if = "true" id="login">로그인</router-link> 
+       <router-link to="/login" v-if = "false"  id="logout">로그아웃</router-link> |
       <router-link to="/mypage">마이쇼핑</router-link> |
       <router-link to="/cart">장바구니</router-link>
     </nav>
@@ -12,9 +13,20 @@
       </router-link>
     </div>
     <router-view/>
-    
   </div>
 </template>
+
+
+<script>
+
+export default {
+
+  data() {
+ },
+  methods: {
+  }
+}
+</script>
 
 <style>
 #app {

@@ -1,5 +1,6 @@
 import Axios from 'axios';
 //import store from '../plugins/store';
+import LoginApi from './LoginApi';
 
 
 class HttpClient {
@@ -12,24 +13,42 @@ class HttpClient {
         'X-Requested-With': 'XMLHttpRequest'
       },
     });
-  //   this.axiosInstance.interceptors.request.use((request) =>this.requestHandler(request));
-  //   this.axiosInstance.interceptors.response.use(response => this.responseHandler(response),
-  //     async error => {
-  //       if (error.response && (error.response.status === 401)) {
-  //         if(sessionStorage.getItem('accountId')) {
-  //           sessionStorage.clear();
-  //           //location.replace('/v1/main');
-  //         }
-  //       }
-  //       throw error;
-  //     });
+    //this.axiosInstance.interceptors.request.use((request) =>this.requestHandler(request));
+    this.axiosInstance.interceptors.response.use(response => this.responseHandler(response),
+      async error => {
+        console.log("error.response.status " + error.response.status);
+        if (error.response && (error.response.status === 403)) {
+          this.refreshtoken();
+        } else  if (error.response && (error.response.status === 400)) {
+          if(sessionStorage.getItem('accessToken')) {
+            sessionStorage.clear();
+            location.replace('/');
+          }
+        }
+        throw error;
+      });
  }
 
- // requestHandler = async (request) => {
-   // let locale = store.state.language.key;
-   // request.headers['Accept-Language'] = locale;
-   // return request;
- //// };
+ async refreshtoken() {
+    console.log("refreshtoken");
+    const tocken = await LoginApi.refreshToken();
+    console.log("tocken.response.status" + tocken.response.status);
+    if (tocken.response && (tocken.response.status === 400)) {    
+      if(sessionStorage.getItem('accessToken')) {
+        sessionStorage.clear();
+      }
+    throw tocken;
+    } else {
+      sessionStorage.setItem("accessToken", this.accessToken);
+      sessionStorage.setItem("refreshToken", this.refreshToken);
+    }
+ }
+
+//  requestHandler = async (request) => {
+//    let locale = store.state.language.key;
+//    request.headers['Accept-Language'] = locale;
+//    return request;
+//   };
 
   responseHandler = async (response) => {
  

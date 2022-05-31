@@ -1,5 +1,15 @@
 <template>
-  <div class="cart">
-    <h1>This is an cart page</h1>
-  </div>
+<div>
+  <h1> 여기는 Cart 화면 구성 해야 합니다.</h1>
+</div>
 </template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style>
+
+</style>

@@ -1,9 +1,10 @@
 <template>
   <div id="app">
     <nav>
-      <router-link to="/signup" v-if="true" id="signup">회원가입</router-link> |
-      <router-link to="/login"  v-if = "true" id="login">로그인</router-link> 
-       <router-link to="/login" v-if = "false"  id="logout">로그아웃</router-link> |
+      <label>{{userName}}</label>
+      <router-link to="/signup" v-if = "!isLogin" id="signup">회원가입</router-link> |
+      <router-link to="/login"  v-if = "!isLogin" id="login">로그인</router-link> 
+       <router-link to="/logout" v-if = "isLogin" id="logout">로그아웃</router-link> |
       <router-link to="/mypage">마이쇼핑</router-link> |
       <router-link to="/cart">장바구니</router-link>
     </nav>
@@ -16,15 +17,73 @@
   </div>
 </template>
 
-
 <script>
+import loginApi from '@/api/LoginApi';
 
 export default {
 
+    beforeCreate(){
+        console.log("beforeCreate"); // data 접근 불가 
+    },
+    created(){
+        console.log("created");  // data 접근 가능 
+    },
+
+    beforeMount(){
+        console.log('beforeMount'); 
+    },
+
+    mounted(){
+      let token = sessionStorage.getItem("accessToken");
+      if (token != null) {
+          this.isLogin = true;
+      } else  {
+        this.isLogin = false;
+      }
+
+    },
+    
+    beforeUpdate(){
+        console.log('beforeUpdate'); 
+    },
+    updated(){
+        console.log('updated');
+        let token = sessionStorage.getItem("accessToken");
+      if (token != null) {
+          this.isLogin = true;
+           this.getUserName();
+      } else  {
+        this.isLogin = false;
+      }
+      console.log("updated isLogin"  + this.isLogin)
+    },
+    beforeDestroy(){
+        console.log('beforeDestroy'); 
+    },
+    destroyed(){
+
+        console.log('destroyed'); 
+    },   
+
   data() {
- },
-  methods: {
-  }
+    return {
+    isLogin : false,
+    userName : '',
+    }
+  },
+   methods: {
+      async getUserName() {
+      console.log("getUserInfo-----");
+        let result = await loginApi.getUserInfo();
+        if (result.data.statusCode === 200) {
+         this.userName = result.data.data.name;
+        } else {
+          this.userName = '';
+        }
+    },
+   }  
+    
+
 }
 </script>
 

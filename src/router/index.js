@@ -34,12 +34,24 @@ const routes = [
     name: 'cart',
     component: () => import(/* webpackChunkName: "cart" */ '../views/CartView.vue')
   },
+  {
+    path: '/logout',
+    name: 'logout',
+    component: () => import(/* webpackChunkName: "cart" */ '../views/LogoutView.vue')
+  },
 ]
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
+});
+
+router.beforeEach(async (to, from, next) => {
+  console.log("to : " + to.path);
+  console.log("from : " + from.path);
+  next();
+
+});
 
 export default router

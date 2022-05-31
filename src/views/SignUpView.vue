@@ -5,7 +5,7 @@
  <div class="mb-3 row">
     <label for="inputId" class="col-sm-2 col-form-label">ID (email) *</label>
     <div class="col-sm-10">
-      <input type="email" class="form-control" placeholder="abcd@email.com" id="inputId" v-model="inputId"  @blur="checkIDvaled">
+      <input type="email" class="form-control" placeholder="abcd@email.com" v-model="inputId"  @blur="checkIDvaled">
     </div>
      <span id="idCheck" class="form-text">
      {{idcheckResult}}
@@ -15,13 +15,13 @@
      <div class="mb-3 row">
     <label for="inputPass" class="col-sm-2 col-form-label">비밀번호</label>
     <div class="col-sm-10">
-      <input type="password" class="form-control" id="inputPass" v-model="inputPass">
+      <input type="password" class="form-control"  v-model="inputPass">
     </div>
   </div>
    <div class="mb-3 row">
     <label for="inputPass" class="col-sm-2 col-form-label">비밀번호 확인</label>
     <div class="col-sm-10">
-      <input type="password" class="form-control" id="inputPassCheck" v-model="inputPasscheck"  @blur="setPasscheck">
+      <input type="password" class="form-control" v-model="inputPasscheck"  @blur="setPasscheck">
     </div>
     <span id="passCheck" class="form-text">
       {{passcheckResult}}
@@ -30,7 +30,7 @@
      <div class="mb-3 row">
     <label for="inputName" class="col-sm-2 col-form-label">이름 *</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="inputName" v-model="inputName">
+      <input type="text" class="form-control" v-model="inputName">
     </div>
     <span id="nameCheck" class="form-text">
       {{nameCheck}}
@@ -39,7 +39,7 @@
    <div class="mb-3 row">
     <label for="inputPhoneNumber" class="col-sm-2 col-form-label">전화번호 *</label>
     <div class="col-sm-10">
-      <input type="text" class="form-control" id="inputPhoneNumber"  v-model="inputPhoneNumber">
+      <input type="text" class="form-control"  v-model="inputPhoneNumber">
     </div>
    </div>
 
@@ -55,8 +55,8 @@
               <input type="button" class="btn btn-primary" @click="execDaumPostcode" value="우편번호 찾기">
           </div>      
       </div>
-      <input type="text" class="form-control" id="inputAddress" v-model="inputAddress">
-      <input type="text" class="form-control" id="inputAddress" v-model="extraAddress" placeholder="상세주소를 입력하세요.">
+      <input type="text" class="form-control"  v-model="inputAddress">
+      <input type="text" class="form-control"  v-model="extraAddress" placeholder="상세주소를 입력하세요.">
     </div>
   </div>
 
@@ -110,29 +110,31 @@ export default {
   },
 
   methods: {
-        checkIDvaled() {
+       async checkIDvaled() {
           if (!this.inputId) {
              this.idcheckResult = "이메일은 필수입니다.";
           } else if (!this.validEmail(this.inputId)) {
              this.idcheckResult = "이메일 형식을 확인하세요.";
           } else {
-            this.idcheckResult = "사용 가능한 ID 입니다."
-        //     SignUpApi.idValidation(this.inputId).then(res => {
-        //     if (res.data.statusCode === 200) {
-        //       if (res.data.data) {
-        //         this.idcheckResult = "사용 가능한 ID 입니다."
-        //         this.idCheck = true;
 
-        //       } else {
-        //           this.idcheckResult = "사용 할수 없는 ID 입니다."
-        //           this.idCheck = false;
-        //       }
+           let response = await SignUpApi.idValidation(this.inputId);
+           console.log(response.data.statusCode);
+           console.log(response.data.data);
 
-        //     } else {
-        //       this.idcheckResult = "사용 할수 없는 ID 입니다."
-        //       this.idCheck = false;
-        //     }
-        // })
+            if (response.data.statusCode === 200) {
+              if (!response.data.data) {
+                this.idcheckResult = "사용 가능한 ID 입니다."
+                this.idCheck = true;
+
+              } else {
+                  this.idcheckResult = "사용 할수 없는 ID 입니다."
+                  this.idCheck = false;
+              }
+            } else {
+             this.idcheckResult = "사용 할수 없는 ID 입니다."
+             this.idCheck = false;
+            }
+
       }
      },
 

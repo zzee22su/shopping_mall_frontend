@@ -75,18 +75,15 @@ export default {
               console.log(" this.accessToken : " +  sessionStorage.getItem("accessToken"));
               console.log(" this.refreshToken : " +  sessionStorage.getItem("refreshToken"));
               this.isLogin = true;
-              // 메인 페이지로 이동 해야 할거 같은데............
-              this.changeLoginState();
               this.$router.replace('home');              
             } else {
               sessionStorage.clear();
               this.isLogin = false;
-              this.changeLoginState();
             }
             
         }        
       },
-
+     
   }
 }
 </script>

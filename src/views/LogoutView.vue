@@ -22,7 +22,7 @@ methods: {
       let response = await loginApi.logout(bodyForm);
       sessionStorage.clear();
       if (response.response.status === 200) {
-        //this.$router.replace('home');    
+        this.$router.replace('home');    
       }
     },
   }

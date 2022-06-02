@@ -92,6 +92,14 @@ import CryptoJS from "crypto-js";
 export default {
   data() {
     return {
+      inputId:'',
+      inputPass:'',
+      inputPasscheck:'',
+      inputName:'',
+      inputPhoneNumber:'',
+      postcode:'',
+      inputAddress:'',
+      extraAddress: "",
       idcheckResult : '*',
       idCheck:false,
       checkPass:false,
@@ -99,10 +107,7 @@ export default {
       nameCheck:'',
       addressCheck:'',
       visible: false,
-      popupbody:'',
-      postcode: "",
-      extraAddress: "",
-      inputAddress :"",
+      popupbody:'',      
     }
   },
   components: {

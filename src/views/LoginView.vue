@@ -44,6 +44,11 @@ export default {
 
     }
   },
+   destroyed(){
+     console.log("destroyed");
+     sessionStorage.removeItem("mypage");
+   },
+
 
 
   methods : {
@@ -72,10 +77,13 @@ export default {
               this.refreshToken = response.data.data.refreshToken;
               sessionStorage.setItem("accessToken", this.accessToken);
               sessionStorage.setItem("refreshToken", this.refreshToken);
-              console.log(" this.accessToken : " +  sessionStorage.getItem("accessToken"));
-              console.log(" this.refreshToken : " +  sessionStorage.getItem("refreshToken"));
               this.isLogin = true;
-              this.$router.replace('home');              
+              if (sessionStorage.getItem("mypage") === "mypage") {
+                sessionStorage.removeItem("mypage");
+                this.$router.replace('mypage');
+              } else {
+                this.$router.go(-1);
+              }         
             } else {
               sessionStorage.clear();
               this.isLogin = false;

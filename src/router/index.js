@@ -1,48 +1,46 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import ItemList from '@/views/ItemList.vue'
+import MyPageRouter from '../router/MyPageRouter'
 
 Vue.use(VueRouter)
 
+
+const SignupRoute = {
+  path: '/signup',
+  name: 'signup',
+  component: () => import('@/views/SignUpView'),
+};
+
+const LoginRouter = {
+  path: '/login',
+  name: 'login',
+  component: () => import('@/views/LoginView'),
+};
+
+
+const CartViewRouter = {
+  path: '/cart',
+  name: 'cart',
+  component: () => import('@/views/CartView'),
+};
+
+const LogOutRouter = {
+  path: '/logout',
+  name: 'logout',
+  component: () => import('@/views/LogoutView'),
+};
+
+
+const RootRoute = {
+  path: '/',
+  name: 'item-list',
+  component: () => import('@/views/ItemList'),
+};
+
+
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: '/signup',
-      name: 'signup',
-      component: () => import(/* webpackChunkName: "signup" */ '../views/SignUpView.vue')
-    },
-
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import(/* webpackChunkName: "login" */ '../views/LoginView.vue')
-    },
-  
-    {
-      path: '/mypage',
-      name: 'mypage',
-      component: () => import(/* webpackChunkName: "mypage" */ '../views/MyPageView.vue')
-    },
-  
-    {
-      path: '/cart',
-      name: 'cart',
-      component: () => import(/* webpackChunkName: "cart" */ '../views/CartView.vue')
-    },
-    {
-      path: '/logout',
-      name: 'logout',
-      component: () => import(/* webpackChunkName: "cart" */ '../views/LogoutView.vue')
-    },
-
-    {
-      path: '/:category?',
-      name: 'item-list',
-      component: ItemList
-    }
-  ]
+  routes: [RootRoute, LoginRouter, MyPageRouter, SignupRoute, CartViewRouter, LogOutRouter],
 });
 
 router.beforeEach(async (to, from, next) => {

@@ -1,0 +1,38 @@
+body {
+    background: $background-color;
+    transition: background .5s;
+  }
+  #app {
+    transition: margin-left .5s;
+    transition: margin-right .5s;
+    padding: 20px;
+  }
+  .navMenu {
+    font-family: $font-family-sans-serif;
+    min-height: 100vh;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    background: $menu-background;
+    overflow-x: auto;
+    transition: 0.5s;
+    a {
+      padding: 8px 8px 8px 32px;
+      text-decoration: none;
+      font-size: 15px;
+      color: $menu-text;
+      display: block;
+      transition: 0.3s;
+      &:hover {
+        color: $menu-text-hover;
+      }
+    }
+  }
+  @media screen and (max-height: 450px) {
+    .navMenu {
+      padding-top: 15px;
+      a {
+        font-size: 18px;
+      }
+    }
+  }

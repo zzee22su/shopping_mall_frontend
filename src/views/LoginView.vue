@@ -72,7 +72,7 @@ export default {
             let response = await loginApi.login(loginInfo);
             console.log(response);
 
-            if (response.data.statusCode === 200) {
+            if (response.status === 200) {
               this.accessToken =  response.data.data.accessToken;
               this.refreshToken = response.data.data.refreshToken;
               sessionStorage.setItem("accessToken", this.accessToken);

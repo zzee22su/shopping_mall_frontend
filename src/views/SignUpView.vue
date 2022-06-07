@@ -198,9 +198,9 @@ export default {
       handleClickButton() {
       this.visible = !this.visible;
     },
-    passSHA256() {
+    passSHA256(password) {
       var cipherText = CryptoJS.AES.encrypt(
-          "my message",
+          password,
             "secretkey123"
           ).toString();
         console.log(cipherText);

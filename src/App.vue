@@ -78,9 +78,11 @@ export default {
   },
    methods: {
       async getUserName() {
-      console.log("getUserInfo-----");
+      
         let result = await loginApi.getUserInfo();
-        if (result.data.statusCode === 200) {
+        console.log(result);
+        if (result.status === 200) {
+          console.log("Name : " + result.data.data.name)
          this.userName = result.data.data.name;
         } else {
           this.userName = '';
@@ -121,6 +123,7 @@ nav {
   text-align: right;
   padding: 30px;
   font-size: 13px;
+  height:100px;
 }
 
 nav a {

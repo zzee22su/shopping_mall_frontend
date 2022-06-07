@@ -13,14 +13,19 @@
          <p>Study Shoping Mall~!</p>
       </router-link>
     </div>
-    <router-view/>
+    <Category/>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import loginApi from '@/api/LoginApi';
+import Category from '@/components/Category.vue'
 
 export default {
+  components: { 
+    Category 
+    },
 
     beforeCreate(){
         console.log("beforeCreate"); // data 접근 불가 

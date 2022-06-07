@@ -3,13 +3,14 @@ const { defineConfig } = require('@vue/cli-service');
 
 module.exports = defineConfig({
   transpileDependencies: true,
+  lintOnSave : true,
   devServer: {
     port: 8080,
-    // ÇÁ·Ï½Ã ¼³Á¤
+    // í”„ë¡ì‹œ ì„¤ì •
     proxy: {
-      // ÇÁ·Ï½Ã ¿äÃ»À» º¸³¾ apiÀÇ ½ÃÀÛ ºÎºĞ
+      // í”„ë¡ì‹œ ìš”ì²­ì„ ë³´ë‚¼ apiì˜ ì‹œì‘ ë¶€ë¶„
       '^/api': {
-        // ÇÁ·Ï½Ã ¿äÃ»À» º¸³¾ ¼­¹öÀÇ ÁÖ¼Ò
+        // í”„ë¡ì‹œ ìš”ì²­ì„ ë³´ë‚¼ ì„œë²„ì˜ ì£¼ì†Œ
         target: 'http://localhost:8090',
         changeOrigin: false,
         xfwd: true,

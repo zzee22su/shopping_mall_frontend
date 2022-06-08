@@ -30,17 +30,23 @@ const LogOutRouter = {
   component: () => import('@/views/LogoutView'),
 };
 
-
 const RootRoute = {
   path: '/',
+  name: 'home',
+  component: () => import('@/views/HomeView'),
+};
+
+const CategoryRoute = {
+  path: '/:category',
   name: 'item-list',
   component: () => import('@/views/ItemList'),
+  props: true
 };
 
 
 const router = new VueRouter({
   mode: 'history',
-  routes: [RootRoute, LoginRouter, MyPageRouter, SignupRoute, CartViewRouter, LogOutRouter],
+  routes: [RootRoute, LoginRouter, MyPageRouter, SignupRoute, CartViewRouter, LogOutRouter, CategoryRoute],
 });
 
 router.beforeEach(async (to, from, next) => {

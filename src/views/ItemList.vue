@@ -1,8 +1,9 @@
 <template>
   <div>
+      {{ $route.params.category }}
+      {{ category }}
       <Item v-for="item in items" :item="item"></Item>
       <!-- :item="item"은 Item.vue에 props를 가리킴 -->
-      {{ this.items }}
   </div>
 </template>
 
@@ -11,6 +12,13 @@
 import Item from '@/components/Item.vue'
 
 export default {
+    name: 'item-list',
+    props: {
+        category : {
+            type: String
+        }
+    },
+
     components: {
         Item
     },
@@ -34,25 +42,41 @@ export default {
                     id: 2,
                     title: 'T-shirt',
                     category: 'top'
+                },
+
+                {
+                    id: 3,
+                    title: 'T-shirt',
+                    category: 'top'
                 }
-            ]
+            ],
+            showList: [this.items]
         }
     },
 
+    
 
-created() {
-      console.log("created");
-    console.log(this.$route.path);
-},
+    created() {
+        console.log("created");
+         console.log("!!!!showList : "+this.showList);
+    },
 
-mounted() {
-    console.log("mounted");
-},
+    mounted() {
+        console.log("mounted");
+        console.log(this.$route.path);
+         console.log("!!!!showList : "+this.showList);
+    },
 
     watch: {
-        $route(to) {
-            console.log("watch");
-            this.items = this.items.filter(item => item.category === to);  
+        // currentPath(val) {
+        //     console.log("!!!watch : "+val);
+        // },
+        category(currentCategory, lastCategory) {
+            console.log("!!!watch category: "+currentCategory, lastCategory);
+            if(currentCategory === 'top' || currentCategory === 'bottom' ) {
+                console.log("!!!!showList : "+this.showList);
+                this.showList = this.items.filter(item => item.category === currentCategory);
+            } 
         }
     }
 }

@@ -1,20 +1,14 @@
 <template>
   <div id="app">
-    <nav>
-      <label>{{userName}}</label>
-      <router-link to="/signup" v-if = "!isLogin" id="signup">회원가입</router-link> |
-      <router-link to="/login"  v-if = "!isLogin" id="login">로그인</router-link> 
-       <router-link to="/logout" v-if = "isLogin" id="logout">로그아웃</router-link> |
-      <router-link to="/mypage">마이쇼핑</router-link> |
-      <router-link to="/cart">장바구니</router-link>
-    </nav>
-    <div id = "title">
-       <router-link to="/" style="text-decoration:none">
-         <p>Study Shoping Mall~!</p>
-      </router-link>
-    </div>
     <Category/>
-    <router-view></router-view>
+    <div class="contents">
+      <div id = "title">
+        <router-link to="/" style="text-decoration:none">
+        <p>Study Shoping Mall~!</p>
+        </router-link>
+      </div>
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -133,5 +127,10 @@ nav a {
 
 nav a.router-link-exact-active {
   color: #42b983;
+}
+
+.contents {
+  padding-top: 75px; 
+  /* nav 높이 보다 커야 title이 보임. */
 }
 </style>

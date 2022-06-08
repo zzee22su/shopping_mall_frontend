@@ -7,7 +7,7 @@
                 <h4>{{ item.title }}</h4>
                 <div class="btn-group" role="group" aria-label="...">
                     <button type="button" class="btn btn-default" @click="addWishList">
-                        <img src="../assets/premium-icon-heart-2589175.png" alt="../assets/logo.png">
+                        <img src="../assets/empty_heart.png" alt="../assets/logo.png">
                     </button>
                 </div>
             </div>

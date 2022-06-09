@@ -17,13 +17,13 @@ class HttpClient {
     this.axiosInstance.interceptors.response.use(response => this.responseHandler(response),
       async error => {
         console.log("error.response.status " + error.response.status);
-        if (error.response && (error.response.status === 403)) {
-          this.refreshtoken();
-        } else  if (error.response && (error.response.status === 400)) {
-          if(sessionStorage.getItem('accessToken')) {
-            sessionStorage.clear();
-            location.replace('/');
-          }
+          if (error.response && (error.response.status === 400) && (error.response.data.message === "토큰이 만료되었습니다.")) {
+            if(sessionStorage.getItem('accessToken')) {
+              this.refreshtoken();
+            }
+        } else {
+          sessionStorage.clear();
+          location.replace('/');
         }
         throw error;
       });
@@ -33,9 +33,10 @@ class HttpClient {
     console.log("refreshtoken");
     const tocken = await LoginApi.refreshToken();
     console.log("tocken.response.status" + tocken.response.status);
-    if (tocken.response && (tocken.response.status === 400)) {    
+    if (tocken.response && (tocken.response.status === 400)) {
       if(sessionStorage.getItem('accessToken')) {
         sessionStorage.clear();
+        location.replace('/');
       }
     throw tocken;
     } else {

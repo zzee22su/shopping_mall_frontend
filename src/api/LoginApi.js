@@ -26,6 +26,6 @@ export default {
     const bodyForm = new FormData();
     bodyForm.append('accessToken', sessionStorage.getItem("accessToken"));
     bodyForm.append('refreshToken',sessionStorage.getItem("refreshToken"));
-    return httpClient.post(`/api/v1/logout`, bodyForm, config); 
+    return httpClient.post(`api/v1/token/refresh`, bodyForm, config); 
   }
 }

@@ -85,6 +85,7 @@ export default {
                 this.$router.go(-1);
               }         
             } else {
+               this.checkPass = "아이디와 패스워드를 다시 확인후 로그인 해주세요.";
               sessionStorage.clear();
               this.isLogin = false;
             }

@@ -115,12 +115,13 @@ export default {
         },
 
         execDaumPostcode() {
-            AddressUtils.getAddress(function(s_addr){
-                const address = s_addr;
-                console.log(address);
-                document.getElementById('postcode').value = address.postNum;
-                document.getElementById('address').value =  address.addr;
-                document.getElementById('extraAddress').value =  address.extadadr;
+            let me = this;
+            AddressUtils.getAddress(function(s_addr){                 
+
+                me.postcode = s_addr.postNum; 
+                me.address = s_addr.addr;
+                me.extraAddress = s_addr.extaddr;
+                console.log(s_addr);
             });
         },
 

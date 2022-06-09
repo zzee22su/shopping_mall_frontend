@@ -49,14 +49,14 @@
     <div class="col-sm-10">
       <div class="row g-3">
            <div class="col">
-              <input type="text" class="form-control" v-model="postcode" placeholder="우편번호">
+              <input type="text" id = "postcode" class="form-control" v-model="postcode" placeholder="우편번호">
           </div>
            <div class="col">
               <input type="button" class="btn btn-primary" @click="execDaumPostcode" value="우편번호 찾기">
           </div>      
       </div>
-      <input type="text" class="form-control"  v-model="inputAddress">
-      <input type="text" class="form-control"  v-model="extraAddress" placeholder="상세주소를 입력하세요.">
+      <input type="text" class="form-control"   id = "inputAddress" v-model="inputAddress">
+      <input type="text" class="form-control"   id = "extraAddress" v-model="extraAddress" placeholder="상세주소를 입력하세요.">
     </div>
   </div>
 
@@ -87,7 +87,7 @@
 import SignUpApi from '@/api/SignUpApi.js';
 import WindowPopup  from '../components/PopupView.vue';
 import CryptoJS from "crypto-js";
-
+import AddressUtils from '@/api/AddressUtils';
 
 export default {
   data() {
@@ -126,7 +126,7 @@ export default {
            console.log(response.data.statusCode);
            console.log(response.data.data);
 
-            if (response.data.statusCode === 200) {
+            if (response.status === 200) {
               if (!response.data.data) {
                 this.idcheckResult = "사용 가능한 ID 입니다."
                 this.idCheck = true;
@@ -139,8 +139,7 @@ export default {
              this.idcheckResult = "사용 할수 없는 ID 입니다."
              this.idCheck = false;
             }
-
-      }
+        }
      },
 
      validEmail: function(email) {
@@ -164,8 +163,8 @@ export default {
       onSubmitSignUp(e) {
         e.preventDefault();
         console.log("onSubmitSignUp");
-        this.passSHA256();
-        console.log("passSHA256");
+        //this.passSHA256();
+       // console.log("passSHA256");
 
         if (!this.inputName) {
           this.popupbody = "이름란이 비었습니다. 이름을 입력해주세요."
@@ -184,7 +183,7 @@ export default {
             password : this.inputPass,
             name : this.inputName,
             phoneNumber : this.inputPhoneNumber,
-            address : "("+this.postcode+")" +this.inputAddress + this.extraAddress,
+            address : this.postcode +this.inputAddress + this.extraAddress,
           }
           console.log(JSON.stringify(body));
           
@@ -193,9 +192,9 @@ export default {
           SignUpApi.signUp(body);
           
         }
-      },
+    },
 
-      handleClickButton() {
+    handleClickButton() {
       this.visible = !this.visible;
     },
     passSHA256(password) {
@@ -207,49 +206,18 @@ export default {
     },
 
     execDaumPostcode() {
-       new window.daum.Postcode({
-        oncomplete: (data) => {
-          if (this.extraAddress !== "") {
-            this.extraAddress = "";
-          }
-          if (data.userSelectedType === "R") {
-            // 사용자가 도로명 주소를 선택했을 경우
-            this.inputAddress = data.roadAddress;
-          } else {
-            // 사용자가 지번 주소를 선택했을 경우(J)
-            this.inputAddress = data.jibunAddress;
-          }
+      let me = this;
+       AddressUtils.getAddress(function(s_addr) {
+                me.postcode = s_addr.postNum; 
+                me.inputAddress = s_addr.addr;
+                me.extraAddress = s_addr.extaddr;
+                console.log(s_addr);
+       });
 
-          console.log(this.inputAddress);
- 
-           // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-          if (data.userSelectedType === "R") {
-            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-            if (data.bname !== "" && /[동|로|가]$/g.test(data.bname)) {
-              this.extraAddress += data.bname;
-            }
-            // 건물명이 있고, 공동주택일 경우 추가한다.
-            if (data.buildingName !== "" && data.apartment === "Y") {
-              this.extraAddress +=
-                this.extraAddress !== ""
-                  ? `, ${data.buildingName}`
-                  : data.buildingName;
-            }
-            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-            if (this.extraAddress !== "") {
-              this.extraAddress = `(${this.extraAddress})`;
-            }
-          } else {
-            this.extraAddress = "";
-          }
-          // 우편번호를 입력한다.
-          this.postcode = data.zonecode;
-          console.log(data.zonecode);
-        },
-      }).open();
-    },
-   }
+   },
+
+  },
+
 }
 
 </script>

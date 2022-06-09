@@ -1,7 +1,7 @@
 export default {
 getAddress(cb) {
-    let inputAddress;
-    let extraAddress;
+    let inputAddress='';
+    let extraAddress='';
     var address = {};
 
         new window.daum.Postcode({
@@ -13,7 +13,6 @@ getAddress(cb) {
              // 사용자가 지번 주소를 선택했을 경우(J)
              inputAddress = data.jibunAddress;
            }
-           console.log("주소" + inputAddress);
            address.addr = inputAddress;
   
             // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
@@ -37,14 +36,11 @@ getAddress(cb) {
            } else {
              extraAddress = "";
            }
-           address.extadadr = extraAddress;
-           console.log("상세주소" + extraAddress);
+           address.extaddr = extraAddress;
            // 우편번호를 입력한다.
            let postcodenumber = data.zonecode;
-           console.log("우편번호" + postcodenumber);
            address.postNum = postcodenumber;
-
-           console.log(address);
+           
            cb(address);
          },
        }).open();

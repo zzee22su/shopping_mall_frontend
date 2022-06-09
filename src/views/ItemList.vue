@@ -1,8 +1,6 @@
 <template>
   <div>
-      {{ $route.params.category }}
-      {{ category }}
-      <Item v-for="item in items" :item="item"></Item>
+      <Item v-for="item in showList" :item="item"></Item>
       <!-- :item="item"은 Item.vue에 props를 가리킴 -->
   </div>
 </template>
@@ -52,33 +50,27 @@ export default {
             ],
             showList: [this.items]
         }
-    },
+    }, 
 
-    
-
-    created() {
-        console.log("created");
-         console.log("!!!!showList : "+this.showList);
-    },
-
-    mounted() {
-        console.log("mounted");
-        console.log(this.$route.path);
-         console.log("!!!!showList : "+this.showList);
+    methods: {
+        showCategory() {
+            const category = this.$route.params.category;
+            if(category === 'top' || category === 'bottom') {
+                this.showList = this.items.filter(item => item.category === category);
+            }
+        }
     },
 
     watch: {
-        // currentPath(val) {
-        //     console.log("!!!watch : "+val);
-        // },
-        category(currentCategory, lastCategory) {
-            console.log("!!!watch category: "+currentCategory, lastCategory);
-            if(currentCategory === 'top' || currentCategory === 'bottom' ) {
-                console.log("!!!!showList : "+this.showList);
-                this.showList = this.items.filter(item => item.category === currentCategory);
-            } 
+        $route() {
+            this.showCategory();
         }
-    }
+    },
+
+    created() {
+        console.log('ItemList created');
+        this.showCategory();
+    },
 }
 </script>
 

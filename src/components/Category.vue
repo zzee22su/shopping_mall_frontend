@@ -34,7 +34,6 @@
 
         methods: {
             clickTop() {
-                console.log("!!!clickTop");
                 this
                     .$router
                     .push({
@@ -46,7 +45,6 @@
                     .catch(() => {});
             },
             clickBottom() {
-                console.log("!!!clickBottom");
                 this
                     .$router
                     .push({

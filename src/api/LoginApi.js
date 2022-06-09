@@ -24,8 +24,8 @@ export default {
   refreshToken:() => {
     const config = {headers : {'Content-Type': 'application/x-www-form-urlencoded'} };
     const bodyForm = new FormData();
-    bodyForm.append('accessToken', JSON.stringify(sessionStorage.getItem("accessToken")));
-    bodyForm.append('refreshToken', JSON.stringify(sessionStorage.getItem("refreshToken")));
+    bodyForm.append('accessToken', sessionStorage.getItem("accessToken"));
+    bodyForm.append('refreshToken',sessionStorage.getItem("refreshToken"));
     return httpClient.post(`/api/v1/logout`, bodyForm, config); 
   }
 }

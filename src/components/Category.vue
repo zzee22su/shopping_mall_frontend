@@ -7,6 +7,9 @@
             </div>
             <div class="div-all-basic">
                 <li >
+                    <label v-if="isLogin">{{userName}}</label>
+                </li>
+                <li >
                     <router-link to="/signup" v-if="!isLogin" id="signup">회원가입</router-link>
                 </li>
                 <li>
@@ -27,9 +30,28 @@
 </template>
 
 <script>
+    import loginApi from '@/api/LoginApi';
     export default {
         data() {
-            return {name: 'Category'}
+            return {
+                name: 'Category',
+                isLogin : false,
+                userName : '',
+
+                
+            }
+        },
+
+        mounted(){
+            console.log('updated');
+            let token = sessionStorage.getItem("accessToken");
+            if (token != null) {
+                this.isLogin = true;
+                this.getUserName();
+            } else  {
+                this.isLogin = false;
+            }
+            console.log("updated isLogin"  + this.isLogin)
         },
 
         methods: {
@@ -54,7 +76,18 @@
                         }
                     })
                     .catch(() => {});
-            }
+            },
+            async getUserName() {
+      
+                let result = await loginApi.getUserInfo();
+                console.log(result);
+                if (result.status === 200) {
+                console.log("Name : " + result.data.data.name)
+                this.userName = result.data.data.name;
+                } else {
+                this.userName = '';
+                }
+            },
         }
     }
 </script>

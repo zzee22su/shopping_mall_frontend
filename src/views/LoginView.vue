@@ -71,7 +71,6 @@ export default {
             console.log(loginInfo);
             let response = await loginApi.login(loginInfo);
             console.log(response);
-
             if (response.status === 200) {
               this.accessToken =  response.data.data.accessToken;
               this.refreshToken = response.data.data.refreshToken;
@@ -82,8 +81,10 @@ export default {
                 sessionStorage.removeItem("mypage");
                 this.$router.replace('mypage');
               } else {
-                this.$router.go(-1);
-              }         
+                
+                this.$router.replace('home');
+                location.replace('/');
+              }        
             } else {
                this.checkPass = "아이디와 패스워드를 다시 확인후 로그인 해주세요.";
               sessionStorage.clear();

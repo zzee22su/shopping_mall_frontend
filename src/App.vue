@@ -13,56 +13,12 @@
 </template>
 
 <script>
-import loginApi from '@/api/LoginApi';
 import Category from '@/components/Category.vue'
 
 export default {
   components: { 
     Category 
     },
-
-    beforeCreate(){
-        console.log("beforeCreate"); // data 접근 불가 
-    },
-    created(){
-        console.log("created");  // data 접근 가능 
-    },
-
-    beforeMount(){
-        console.log('beforeMount'); 
-    },
-
-    mounted(){
-      let token = sessionStorage.getItem("accessToken");
-      if (token != null) {
-          this.isLogin = true;
-      } else  {
-        this.isLogin = false;
-      }
-
-    },
-    
-    beforeUpdate(){
-        console.log('beforeUpdate'); 
-    },
-    updated(){
-        console.log('updated');
-        let token = sessionStorage.getItem("accessToken");
-      if (token != null) {
-          this.isLogin = true;
-           this.getUserName();
-      } else  {
-        this.isLogin = false;
-      }
-      console.log("updated isLogin"  + this.isLogin)
-    },
-    beforeDestroy(){
-        console.log('beforeDestroy'); 
-    },
-    destroyed(){
-
-        console.log('destroyed'); 
-    },   
 
   data() {
     return {
@@ -71,17 +27,7 @@ export default {
     }
   },
    methods: {
-      async getUserName() {
       
-        let result = await loginApi.getUserInfo();
-        console.log(result);
-        if (result.status === 200) {
-          console.log("Name : " + result.data.data.name)
-         this.userName = result.data.data.name;
-        } else {
-          this.userName = '';
-        }
-    },
    }  
     
 

@@ -18,11 +18,12 @@ export default {
 methods: {
     async logout() {
       const bodyForm = new FormData();
-      bodyForm.append('accessToken', JSON.stringify(sessionStorage.getItem("accessToken")));
+      bodyForm.append('accessToken',sessionStorage.getItem("accessToken"));
       let response = await loginApi.logout(bodyForm);
       sessionStorage.clear();
-      if (response.response.status === 200) {
-        this.$router.replace('home');    
+      if (response.status === 200) {
+        this.$router.replace('home');
+        location.replace('/');
       }
     },
   }

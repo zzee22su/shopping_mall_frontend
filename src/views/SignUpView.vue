@@ -160,7 +160,7 @@ export default {
          this.passcheckResult = "비밀번호가 다릅니다. 비밀번호를 다시 설정해주세요."
        }
      },
-      onSubmitSignUp(e) {
+      async onSubmitSignUp(e) {
         e.preventDefault();
         console.log("onSubmitSignUp");
         //this.passSHA256();
@@ -189,7 +189,11 @@ export default {
           
           const bodyForm = new FormData();
           bodyForm.append('userInfo', JSON.stringify(body));
-          SignUpApi.signUp(body);
+         let result = await SignUpApi.signUp(body);
+
+         if (result.status === 200) {
+           this.$router.replace('home');
+         }
           
         }
     },

@@ -36,9 +36,7 @@
             return {
                 name: 'Category',
                 isLogin : false,
-                userName : '',
-
-                
+                userName : '',             
             }
         },
 

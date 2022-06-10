@@ -28,15 +28,27 @@ export default {
 
     data() {
         return {
-            name : 'Item'
+            name: 'Item',
+            isLogin: false
         }
     },
+    
     methods: {
         addWishList() {
-            //TODO : (로그인X) 찜 클릭 시, '로그인이 필요합니다. 로그인 하시겠습니까?' alert 창 띄우기
-            alert('로그인이 필요합니다. 로그인 하시겠습니까?'); 
+            if(!this.isLogin) {
+                if(confirm('로그인이 필요합니다. 로그인 하시겠습니까?')) {
+                    location.href="/login"
+                } 
+            }
         }
-    }
+    },
+    
+    mounted() {
+        let token = sessionStorage.getItem("accessToken");
+        if (token != null) {
+            this.isLogin = true;
+        }
+}
 
 }
 </script>

@@ -24,6 +24,10 @@
                 <li >
                     <router-link to="/cart">장바구니</router-link>
                 </li>
+                <li>
+                    <router-link to="/addshop">상품등록</router-link>
+                </li>
+
             </div>
         </nav>
     </div>

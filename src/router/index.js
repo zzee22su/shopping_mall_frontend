@@ -24,6 +24,12 @@ const CartViewRouter = {
   component: () => import('@/views/CartView'),
 };
 
+const AddShopRouter = {
+  path:'/addshop',
+  name: 'addshop',
+  component:() => import('@/views/AddShopView'),
+};
+
 const LogOutRouter = {
   path: '/logout',
   name: 'logout',
@@ -46,7 +52,7 @@ const CategoryRoute = {
 
 const router = new VueRouter({
   mode: 'history',
-  routes: [RootRoute, LoginRouter, MyPageRouter, SignupRoute, CartViewRouter, LogOutRouter, CategoryRoute],
+  routes: [RootRoute, LoginRouter, MyPageRouter, SignupRoute, CartViewRouter,AddShopRouter, LogOutRouter, CategoryRoute],
 });
 
 router.beforeEach(async (to, from, next) => {

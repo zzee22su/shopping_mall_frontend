@@ -100,7 +100,7 @@ export default {
             })
             let body ;
              body =  `{
-                "name": ${name},
+                "name": "${name}",
                 "optionValues": ${JSON.stringify( this.suboptionsave)}
             }` 
             console.log(body);

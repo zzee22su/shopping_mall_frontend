@@ -65,12 +65,12 @@ name: 'productContent',
         },
         saveOp(option) {
             console.log("saveOption parent....")
-            let body =  `{ "name": ${this.productName},
+            let body =  `{ "name": "${this.productName}",
                 "price" : ${this.productPrice},
                 "deliveryCost" : ${this.deliveryCost},
                 "point" : ${this.point},
                 "productionOption": ${option},
-                "content" :  ${this.editorData}
+                "content" :  ${JSON.stringify(this.editorData)}
             }`
            console.log(body);
 

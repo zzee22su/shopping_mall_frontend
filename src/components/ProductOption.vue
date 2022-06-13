@@ -3,7 +3,7 @@
       <div class="row mb-3" v-for="(item, index) in optionList" :key="index">
         <label class="col-sm-1 col-form-label">옵션명</label>
         <div class="col-sm-3">
-            <input type="text" class="form-control" id="optionTitle" v-model="otpionName">
+            <input type="text" class="form-control" id="optionTitle" v-model = "item.otpionName">
         </div>
 
         <div class="col-sm-3">
@@ -16,11 +16,11 @@
       <div   class="row mb-10" v-for="(subItem, subindex) in suboptionList" :key="subindex+'l'" id="subOption">
             <label  class="col-sm-2 col-form-label">옵션내용</label>
             <div class="col-sm-3">
-                <input type="text" class="form-control" id="optionValue" @blur="setoptionValue(subindex, $event.target.value)">
+                <input type="text" class="form-control" id="optionValue" v-model = "subItem.value" >
             </div>
             <label  class="col-sm-2 col-form-label">옵션가격</label>
             <div class="col-sm-3">
-                <input type="text" class="form-control" id="optionPrice" @blur="setoptionPrice(subindex, $event.target.value)">
+                <input type="text" class="form-control" id="optionPrice" v-model = "subItem.price" >
             </div>
             <div class="col-sm-1">
                 <button type="button" class="btn btn-light" @click="deletedetailOption2(subindex)">X</button>
@@ -41,8 +41,9 @@ export default {
             subindex:0,
             optionList:[],
             suboptionList:[],
+            suboptionsave:[],
             otpionName:'',
-            detail:'',
+            value:'',
             price:'',
 
         }
@@ -54,7 +55,7 @@ export default {
             console.log(typeof(this.subindex) +  this.subindex);
             this.suboptionList.push({
                 key: this.subindex,
-                detail: this.detail,
+                value: this.value,
                 price: this.price,
             });
         },        
@@ -84,14 +85,28 @@ export default {
             console.log(this.suboptionList);
         },
 
-        setoptionValue(index, value) {
-            console.log("index " + index + " value " + value);
-            this.suboptionList[index].detail = value;
+        saveOption() {
+            console.log("saveOption   ---- ");
+            this.suboptionList.forEach(suboptionList => {
+                this.suboptionsave.push({value : suboptionList.value, price : suboptionList.price})
+            });
+
+            console.log(JSON.stringify( this.suboptionsave));
+
+
+            let name = '';
+            this.optionList.forEach(optionList => {
+                name =  optionList.otpionName;
+            })
+            let body ;
+             body =  `{
+                "name": ${name},
+                "optionValues": ${JSON.stringify( this.suboptionsave)}
+            }` 
+            console.log(body);
+            this.$emit('saveOption',body);
         },
-        setoptionPrice(index, value) {
-            console.log("index " + index + " value " + value);
-            this.suboptionList[index].price = value;
-        }
+    
     }
 }
 

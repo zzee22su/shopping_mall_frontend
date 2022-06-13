@@ -39,8 +39,8 @@
         data() {
             return {
                 name: 'Category',
-                isLogin : false,
-                userName : '',             
+                isLogin: false,
+                userName: '',             
             }
         },
 

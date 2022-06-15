@@ -45,10 +45,8 @@ const RootRoute = {
 const CategoryRoute = {
   path: '/:category',
   name: 'item-list',
-  component: () => import('@/views/ItemList'),
-  props: true
+  component: () => import('@/views/ItemListView'),
 };
-
 
 const router = new VueRouter({
   mode: 'history',

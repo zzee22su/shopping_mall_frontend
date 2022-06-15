@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
         <div class="col-sm-3 col-md-3"  v-for="item in showList" :key="item.id">
-            <div class="thumbnail">
+            <div class="thumbnail" @click="gotoDetail(item.id)">
                 <img src="../assets/logo.png" alt="../assets/logo.png">
                 <h4>{{ item.title }}</h4>
                 <div class="btn-group" role="group" aria-label="...">
@@ -19,13 +19,6 @@
 <script>
 
 export default {
-    name: 'item-list',
-    props: {
-        category : {
-            type: String
-        }
-    },
-
     data() {
         return {
             items: [
@@ -108,6 +101,17 @@ export default {
                     location.href="/login"
                 } 
             }       
+        },
+
+        gotoDetail(id) {
+            console.log('상품아이디 : ' +id);
+            // location.href='/'+this.category+'/'+id;
+            // location.href='/test';       
+            this.$router.push({
+                // name: 'item-detail',
+                path: '/'+this.$route.params.category+'/'+id,
+                params: { itemId: id }
+            });    
         }
     },
 
@@ -125,7 +129,7 @@ export default {
         let token = sessionStorage.getItem("accessToken");
         if (token != null) {
             this.isLogin = true;
-            }
+        }
     }
 }
 </script>

@@ -15,7 +15,7 @@ const TopDetailRoute = {
 };
 
 export default {
-    path: 'list',
+    path: '/list',
     name: 'item-list',
     component: () => import('@/views/ItemListView'),
     children: [TopRoute, TopDetailRoute]

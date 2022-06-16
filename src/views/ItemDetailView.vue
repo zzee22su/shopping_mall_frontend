@@ -4,7 +4,7 @@
         <div class="col-sm-3 col-md-3">
             <img class="default" src="../assets/logo.png" alt="../assets/logo.png">
         </div>
-        <div class="col-sm-3 col-md-3">   
+        <div class="col-sm-3 col-md-3"> 
             <h2>상품명</h2>
             <table class="table table-borderless">
                 <tbody>         
@@ -71,8 +71,16 @@
 
 <script>
 export default {
+    name: 'item-detail',
+    data() {
+        return {
+            
+        }
+    },
 
-
+    created() {
+        console.log("상세페이지 : "+this.$route.params.itemId);
+    }
 }
 </script>
 

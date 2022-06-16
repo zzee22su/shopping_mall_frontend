@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MyPageRouter from '../router/MyPageRouter'
+import ItemRouter from './ItemRouter';
 
 Vue.use(VueRouter)
 
@@ -42,15 +43,20 @@ const RootRoute = {
   component: () => import('@/views/HomeView'),
 };
 
-const CategoryRoute = {
-  path: '/:category',
-  name: 'item-list',
-  component: () => import('@/views/ItemListView'),
-};
+// const CategoryRoute = {
+//   path: '/:category',
+//   name: 'item-list',
+//   component: () => import('@/views/ItemListView'),
+//   children: [{
+//     path: 'id',
+//     name: 'item-detail',
+//     component: () => import('@/views/ItemDetailView')
+//   }]
+// };
 
 const router = new VueRouter({
   mode: 'history',
-  routes: [RootRoute, LoginRouter, MyPageRouter, SignupRoute, CartViewRouter,AddShopRouter, LogOutRouter, CategoryRoute],
+  routes: [RootRoute, LoginRouter, MyPageRouter, SignupRoute, CartViewRouter,AddShopRouter, LogOutRouter, ItemRouter],
 });
 
 router.beforeEach(async (to, from, next) => {

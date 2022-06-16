@@ -19,6 +19,7 @@
 <script>
 
 export default {
+    
     data() {
         return {
             items: [
@@ -105,11 +106,9 @@ export default {
 
         gotoDetail(id) {
             console.log('상품아이디 : ' +id);
-            // location.href='/'+this.category+'/'+id;
-            // location.href='/test';       
             this.$router.push({
-                // name: 'item-detail',
-                path: '/'+this.$route.params.category+'/'+id,
+                name: 'item-detail',
+                path: `/${this.$route.params.category}/${id}`,
                 params: { itemId: id }
             });    
         }

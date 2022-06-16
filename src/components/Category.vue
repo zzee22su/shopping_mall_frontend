@@ -38,7 +38,6 @@
     export default {
         data() {
             return {
-                name: 'Category',
                 isLogin: false,
                 userName: '',             
             }
@@ -58,26 +57,21 @@
 
         methods: {
             clickTop() {
-                this
-                    .$router
-                    .push({
+                this.$router.push({
                         name: 'item-list',
                         params: {
                             category: 'top'
                         }
-                    })
-                    .catch(() => {});
+                    }).catch(() => {});
             },
             clickBottom() {
-                this
-                    .$router
+                this.$router
                     .push({
                         name: 'item-list',
                         params: {
                             category: 'bottom'
                         }
-                    })
-                    .catch(() => {});
+                    }).catch(() => {});
             },
             async getUserName() {
       

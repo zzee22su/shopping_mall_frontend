@@ -43,17 +43,6 @@ const RootRoute = {
   component: () => import('@/views/HomeView'),
 };
 
-// const CategoryRoute = {
-//   path: '/:category',
-//   name: 'item-list',
-//   component: () => import('@/views/ItemListView'),
-//   children: [{
-//     path: 'id',
-//     name: 'item-detail',
-//     component: () => import('@/views/ItemDetailView')
-//   }]
-// };
-
 const router = new VueRouter({
   mode: 'history',
   routes: [RootRoute, LoginRouter, MyPageRouter, SignupRoute, CartViewRouter,AddShopRouter, LogOutRouter, ItemRouter],

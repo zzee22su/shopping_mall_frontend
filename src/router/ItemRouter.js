@@ -1,12 +1,23 @@
-const ItemDetail = {
-    path: ':id',
-    name: 'item-detail',
-    component: () => import('@/views/ItemDetailView')
+const TopRoute = {
+    path: 'top',
+    name: 'top',
+    components: {
+        list: () => import('@/views/TopView.vue'),
+    } 
+  };
+
+const TopDetailRoute = {
+  path: ':id',
+  name: 'item-detail',
+  components: {
+    list: () => import('@/views/ItemDetailView.vue')
+  } 
 };
 
 export default {
-    path: '/:category',
+    path: 'list',
     name: 'item-list',
     component: () => import('@/views/ItemListView'),
-    children: [ItemDetail]
+    children: [TopRoute, TopDetailRoute]
 };
+

@@ -3,6 +3,9 @@
         <nav>
             <div class="div-all-category">
                 <li @click="clickTop">Top</li>
+                <!-- <li>
+                    <router-link to="/list/">Top</router-link>
+                </li> -->
                 <li @click="clickBottom">Bottom</li>
             </div>
             <div class="div-all-basic">
@@ -58,20 +61,17 @@
         methods: {
             clickTop() {
                 this.$router.push({
-                        name: 'item-list',
-                        params: {
-                            category: 'top'
-                        }
+                        name: 'top'
                     }).catch(() => {});
             },
             clickBottom() {
-                this.$router
-                    .push({
-                        name: 'item-list',
-                        params: {
-                            category: 'bottom'
-                        }
-                    }).catch(() => {});
+                // this.$router
+                //     .push({
+                //         name: 'item-list',
+                //         params: {
+                //             category: 'bottom'
+                //         }
+                //     }).catch(() => {});
             },
             async getUserName() {
       

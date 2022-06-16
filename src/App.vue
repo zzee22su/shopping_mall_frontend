@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Category/>
+    <Navigation/>
     <div class="contents">
       <div id = "title">
         <router-link to="/" style="text-decoration:none">
@@ -13,11 +13,11 @@
 </template>
 
 <script>
-import Category from '@/components/Category.vue'
+import Navigation from '@/components/Navigation.vue'
 
 export default {
   components: { 
-    Category 
+    Navigation 
     },
 
   data() {

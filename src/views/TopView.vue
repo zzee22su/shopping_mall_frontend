@@ -108,9 +108,6 @@ export default {
             this.detail = true;
             this.$router.push({
                 name: 'item-detail',
-                // path: `/list/${this.$route.params.category}/${id}`,
-                // path: `/list/top/${id}`,
-                // path: '/'+id,
                 params: { itemId: id }
             }).catch(() => {});  
         }

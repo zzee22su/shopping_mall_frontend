@@ -87,17 +87,32 @@ export default {
 
         saveOption() {
             console.log("saveOption   ---- ");
-            this.suboptionList.forEach(suboptionList => {
-                this.suboptionsave.push({value : suboptionList.value, price : suboptionList.price})
-            });
-
-            console.log(JSON.stringify( this.suboptionsave));
-
-
+            let checkOptionValue = true;
             let name = '';
             this.optionList.forEach(optionList => {
                 name =  optionList.otpionName;
             })
+            if (!name) {
+                alert("옵션 이름이 없습니다. 다시 확인해주세요.");
+                return;
+            }
+            this.suboptionList.some(suboptionList => {
+                if (suboptionList.value && suboptionList.price) {
+                    this.suboptionsave.push({type : suboptionList.value, price : suboptionList.price})
+                } else {
+                   alert("옵션에 빈 값이 있습니다. 확인해 주세요.false");
+                   checkOptionValue = false;
+                   return true;
+                }
+            });
+            if (checkOptionValue === false) {
+                return;
+            }
+
+            console.log(JSON.stringify( this.suboptionsave));
+
+
+            
             let body ;
              body =  `{
                 "name": "${name}",

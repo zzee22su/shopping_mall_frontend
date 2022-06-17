@@ -181,10 +181,14 @@ name: 'productContent',
            let result = await ProductAPI.saveProduct(formData);
 
             // 상품 저장 한 후 새로고침 하여 데이터 저장.
-            if (result.status === 200) {
-                location.replace('/');
-            } else {
-                console.log("상품 등록 실패.....")
+             if (result.status === 200) {
+
+                 alert("상품이 등록 되었습니다.");
+                 console.log("Dialog closed");
+                 location.replace('/addShop');
+             } else {
+                  alert("상품 등록 실패.....");
+                 console.log("상품 등록 실패.....")
             }
 
         },

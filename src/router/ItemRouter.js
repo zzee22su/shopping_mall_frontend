@@ -1,8 +1,7 @@
 const TopRoute = {
-    path: 'top',
-    name: 'top',
+    path: ':category',
     components: {
-        list: () => import('@/views/TopView.vue'),
+        list: () => import('@/views/CategoryView.vue'),
     } 
   };
 

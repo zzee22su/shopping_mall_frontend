@@ -81,15 +81,13 @@ export default {
                 }
                 
             ],
-            showList: [this.items],
-            detail: false
+            showList: [this.items]
         }
     }, 
 
     methods: {
         showCategory() {
-            // const category = this.$route.params.category;
-             const category = this.$route.name;
+            const category = this.$route.params.category;
             if(category === 'top' || category === 'bottom') {
                 this.showList = this.items.filter(item => item.category === category);
             }
@@ -121,7 +119,6 @@ export default {
 
     created() {
         this.showCategory();
-        this.detail=false;
     },
 
     mounted() {
@@ -129,10 +126,6 @@ export default {
         if (token != null) {
             this.isLogin = true;
         }
-    },
-
-    updated() { 
-      this.detail=false;   
     }
 }
 </script>

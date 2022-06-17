@@ -36,7 +36,21 @@
          <ckeditor :editor="editor" v-model="editorData" :config="editorConfig" ></ckeditor>
     </div>
     <div class="col-10">
-        <input id="input" type="file" accept="image/*"  @change="fileChange" ref="file" />
+        <input id="input" type="file" ref="fileInput" class="file-upload-input" @change="fileChange" accept="image/*"  multiple/>
+         <!-- 업로드된 리스트 -->
+        <div class="file-upload-list" id = "productAddFile">
+            <div class="file-upload-list__item" v-for="(file, index) in fileList" :key="index">
+                <div class="file-upload-list__item__data">
+                <img class="file-upload-list__item__data-thumbnail" :src="file.src">
+                <div class="file-upload-list__item__data-name">
+                    {{ file.name }}
+                </div>
+                </div>
+                <button class="file-upload-list__item__btn-remove" @click="handleRemove(index)">
+                    X
+                </button>
+            </div>
+        </div>
     </div>
     <div class="col-10">
         <button type="button" class="btn btn-primary" @click="onAddProduct">상품등록하기</button>
@@ -82,7 +96,7 @@ name: 'productContent',
             saveOption:'',
             category:'',
             file_name:'',
-            formData:'',
+            fileList:[],
             
         };
     },
@@ -118,15 +132,32 @@ name: 'productContent',
             console.log(event.target.value);
             this.category = event.target.value;
         },
-        fileChange() {
-            const file = this.$refs.file.files[0];
-            console.log(file);
-            this.formData = new FormData();
-            this.filename = file.name;
-            this.formData.append('files', file);
+        fileChange(event) {
+            const files = event.target.files
+            this.addFiles(files)
+        },
+       async addFiles (files) {
+            for(let i = 0; i < files.length; i++) {
+                const src = await this.readFiles(files[i])
+                files[i].src = src
+                this.fileList.push(files[i])
+            }
+        },
+        // FileReader를 통해 파일을 읽어 thumbnail 영역의 src 값으로 셋팅
+         async readFiles (files) {
+         return new Promise((resolve, reject) => {
+            const reader = new FileReader()
+             reader.onload = async (e) => {
+                 resolve(e.target.result) 
+                }
+                reader.readAsDataURL(files)
+            })
+        },
+        handleRemove (index) {
+            this.fileList.splice(index, 1)
         },
 
-        saveOptionSet(option) {
+       async saveOptionSet(option) {
             console.log("saveOption parent....")
             let body =  `{ "name": "${this.productName}",
                 "price" : ${this.productPrice},
@@ -136,16 +167,25 @@ name: 'productContent',
                 "category" : "${this.category}",
                 "content" :  ${JSON.stringify(this.editorData)}
             }`
-            if (!this.formData) {
-                this.formData = new FormData();
-            }
-             this.formData.append('productInfo', body);
+            let formData = new FormData();
 
-           console.log(this.formData);
-           ProductAPI.saveProduct(this.formData);
+            formData.append('productInfo', body);
+             if (this.fileList.length > 0) {
+                 this.fileList.forEach((file) => {
+                     console.log("file name " + file.name);
+                     formData.append('files',file );
+                 });
+             }
+
+           console.log(formData);
+           let result = await ProductAPI.saveProduct(formData);
 
             // 상품 저장 한 후 새로고침 하여 데이터 저장.
-          // location.replace('/');
+            if (result.status === 200) {
+                location.replace('/');
+            } else {
+                console.log("상품 등록 실패.....")
+            }
 
         },
 
@@ -173,6 +213,9 @@ name: 'productContent',
            text-align: center;
       }
       .ck-editor__editable {
-    min-height: 600px;
-}
+            min-height: 600px;
+       }
+       #productAddFile {
+            text-align: left;
+       }
 </style>

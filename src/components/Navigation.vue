@@ -2,11 +2,8 @@
     <div>
         <nav>
             <div class="div-all-category">
-                <li @click="clickTop">Top</li>
-                <!-- <li>
-                    <router-link to="/list/">Top</router-link>
-                </li> -->
-                <li @click="clickBottom">Bottom</li>
+                <li><router-link to="/list/top">Top</router-link></li>
+                <li><router-link to="/list/bottom">Bottom</router-link></li>
             </div>
             <div class="div-all-basic">
                 <li >
@@ -59,20 +56,6 @@
         },
 
         methods: {
-            clickTop() {
-                this.$router.push({
-                        name: 'top'
-                    }).catch(() => {});
-            },
-            clickBottom() {
-                // this.$router
-                //     .push({
-                //         name: 'item-list',
-                //         params: {
-                //             category: 'bottom'
-                //         }
-                //     }).catch(() => {});
-            },
             async getUserName() {
       
                 let result = await loginApi.getUserInfo();

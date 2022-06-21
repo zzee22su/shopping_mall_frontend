@@ -27,9 +27,7 @@
                 <option value="침대*프레임">침대*프레임</option>
             </select>
         </div>
-        <product-option        
-        ref="product_option"
-        @saveOption ="saveOptionSet" />
+        <product-option ref="product_option" @saveOption ="saveOptionSet" />
     
         <!-- eslint-disable-next-line vue/no-multiple-template-root-->
     <div id="productContent">
@@ -72,16 +70,14 @@ name: 'productContent',
             editor: ClassicEditor,
             editorData: '',
             editorConfig: {
-                extraPlugins: [this.MyCustomUploadAdapterPlugin],
-               ckfinder: {
-                // Upload the images to the server using the CKFinder QuickUpload command.
+               extraPlugins: [this.MyCustomUploadAdapterPlugin],
+               ckfinder: {                // Upload the images to the server using the CKFinder QuickUpload command.
                 //uploadUrl: "https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json",
-
+                //바로 업로드 주소를 설정 할 경우 위와 같이 설정한다. 우리 프로젝트에서는 custom uploader를 사용한다.
                 // Define the CKFinder configuration (if necessary).
                 options: {
                     resourceType: "Images"
-                },
-                //    openerMethod: this.MyCustomUploadAdapterPlugin,
+                    },
                 },
                 mediaEmbed: {
                     previewsInData: true
@@ -97,7 +93,8 @@ name: 'productContent',
             category:'',
             file_name:'',
             fileList:[],
-            
+            imgIDList:[],
+            imageID:''          
         };
     },
     components : {
@@ -105,9 +102,9 @@ name: 'productContent',
     },
     methods :{
          MyCustomUploadAdapterPlugin(editor) {
-             console.log("MyCustomUploadAdapterPlugin");
-            editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-            return new UploadAdapter(loader)
+                console.log("MyCustomUploadAdapterPlugin");
+                editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+                return new UploadAdapter(loader)
             }
         },
         
@@ -145,7 +142,7 @@ name: 'productContent',
         },
         // FileReader를 통해 파일을 읽어 thumbnail 영역의 src 값으로 셋팅
          async readFiles (files) {
-         return new Promise((resolve, reject) => {
+         return new Promise((resolve) => {
             const reader = new FileReader()
              reader.onload = async (e) => {
                  resolve(e.target.result) 
@@ -165,7 +162,8 @@ name: 'productContent',
                 "point" : ${this.point},
                 "productionOptions": [${option}],
                 "category" : "${this.category}",
-                "content" :  ${JSON.stringify(this.editorData)}
+                "content" :  ${JSON.stringify(this.editorData)},
+                "contentImgList" : ${JSON.stringify(this.imgIDList)}
             }`
             let formData = new FormData();
 
@@ -177,8 +175,7 @@ name: 'productContent',
                  });
              }
 
-           console.log(formData);
-           let result = await ProductAPI.saveProduct(formData);
+            let result = await ProductAPI.saveProduct(formData);
 
             // 상품 저장 한 후 새로고침 하여 데이터 저장.
              if (result.status === 200) {
@@ -198,7 +195,13 @@ name: 'productContent',
     created() {
         this.index = 0;
     },
-
+    updated() {
+        if (this.imageID !== sessionStorage.getItem("imgId")) {
+            this.imageID = sessionStorage.getItem("imgId");
+            this.imgIDList.push (this.imageID)
+            console.log(this.imgIDList);
+        }
+    }
 }
 </script>
 

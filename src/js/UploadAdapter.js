@@ -6,20 +6,19 @@ export default class UploadAdapter {
     upload() {
         return this.loader.file.then( file => new Promise(((resolve, reject) => {
             this._initRequest();
-            this._initListeners( resolve, reject, file );
+            this._initListeners( resolve, reject);
             this._sendRequest( file );
         })))
     }
 
     _initRequest() {
         const xhr = this.xhr = new XMLHttpRequest();
-        xhr.open('PUT', 'http://localhost:8090/v1/commons/boardImageFiles', true);
+        xhr.open('POST', 'http://localhost:8080/api/v1/img', true);
         xhr.responseType = 'json';
     }
 
-    _initListeners(resolve, reject, file) {
+    _initListeners(resolve, reject) {
         const xhr = this.xhr;
-        const loader = this.loader;
         const genericErrorText = '파일을 업로드 할 수 없습니다.'
 
 
@@ -30,22 +29,20 @@ export default class UploadAdapter {
             if(!response || response.error) {
                 return reject( response && response.error ? response.error.message : genericErrorText );
             }
-
+            console.log(response);
+            let imageFileSrc = response.data.path;
+            let imageId =  response.data.imgId;
+            console.log("imageFileSrc: " + imageFileSrc +", imgId : " + imageId)
+            sessionStorage.setItem("imgId", imageId);
             resolve({
-              
-                default: '' //업로드된 파일 주소
+                default: imageFileSrc //업로드된 파일 주소
             })
         })
     }
 
     _sendRequest(file) {
         const data = new FormData()
-        let borderImage = {
-            domain : 'faq',
-            domainId : 'temp'
-        }
-        data.append('boardImageFileInfo', JSON.stringify(borderImage));
-        data.append('files',file);
+        data.append('file', file);
         this.xhr.send(data)
     }
 }

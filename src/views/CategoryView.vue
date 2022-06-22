@@ -132,8 +132,8 @@ export default {
     },
 
     created() {
-        this.getItemList(4, 8);
-        this.pagingMethod(4);
+        this.getItemList(this.page, this.limit);
+        this.pagingMethod(this.page);
     },
 
     mounted() {

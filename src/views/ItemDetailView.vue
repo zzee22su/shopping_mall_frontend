@@ -81,12 +81,12 @@ export default {
 
     created() {
         console.log("상세페이지 : "+this.$route.params.itemId);
-        this.getProductDetail();
+        this.getProductDetail(this.$route.params.itemId);
     },
 
    methods: {
-        async getProductDetail () {
-            this.itemDetail = await ProductAPI.getProduct(129);
+        async getProductDetail (id) {
+            this.itemDetail = await ProductAPI.getProduct(id);
             console.log(JSON.stringify(this.itemDetail.data));
 
         }

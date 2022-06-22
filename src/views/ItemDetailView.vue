@@ -70,16 +70,26 @@
 </template>
 
 <script>
+import ProductAPI from '@/api/ProductAPI';
 export default {
     name: 'item-detail',
     data() {
         return {
-            
+            itemDetail:'',
         }
     },
 
     created() {
         console.log("상세페이지 : "+this.$route.params.itemId);
+        this.getProductDetail();
+    },
+
+   methods: {
+        async getProductDetail () {
+            this.itemDetail = await ProductAPI.getProduct(129);
+            console.log(JSON.stringify(this.itemDetail.data));
+
+        }
     }
 }
 </script>

@@ -22,6 +22,11 @@ export default {
   getProductList:(pageNo, pageSize) => {
     console.log("getProduct List page No " + pageNo + "pageSize " + pageSize);
       return httpClient.get( `api/v1/product?pageNo=${pageNo}&pageSize=${pageSize}`)
+  },
+  // 상품 이미지 가져오기
+  getProductImage:(id) => {
+    console.log("getProductImage " + id );
+      return httpClient.get( `api/v1/img/${id}`)
   }
 
  }

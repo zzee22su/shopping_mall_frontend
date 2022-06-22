@@ -4,7 +4,8 @@
             <div class="row">
                 <div class="col-sm-3 col-md-3" v-for="item in showList" :key="item.id">
                     <div class="thumbnail" @click="gotoDetail(item.id)">
-                        <img :src="item.image" width="300" height="300" alt="../assets/logo.png" >
+                        <img v-if = item.hasImg :src= "item.image"   width="300" height="300" alt="../assets/logo.png" >
+                         <img v-if = !item.hasImg  src= "../assets/logo.png"   width="300" height="300" alt="../assets/logo.png" >
                             <h4>{{ item.title }}</h4>
                         <div class="btn-group" role="group" aria-label="...">
                             <button type="button" class="btn btn-default" @click="addWishList">
@@ -36,7 +37,8 @@ export default {
             total: '',
             page: 1,
             limit: 12,
-            block: 5
+            block: 5,
+            hasImage:true,
         }
     },
     components : {
@@ -56,7 +58,8 @@ export default {
                            id : product.id,
                            title : product.name,
                            category : 'top',
-                           image: "/api/v1/img/" + product.imgList[0],
+                           image: this.imgSrc(product.imgList[0]),
+                           hasImg : this.hasImage,
                            });
                         console.log("item.image.... " + product.imgList[0]);
                         
@@ -64,6 +67,17 @@ export default {
                    this.showCategory();
 
         },
+        imgSrc(image) {
+           console.log("image " + image);
+            if (image != null && image != undefined) {
+                this.hasImage = true;
+                return "/api/v1/img/" + image;
+            } else {
+                this.hasImage = false;
+                return "../assets/logo.png";
+            }
+        },
+
         showCategory() {
             const category = this.$route.params.category;
             if(category === 'top' || category === 'bottom') {

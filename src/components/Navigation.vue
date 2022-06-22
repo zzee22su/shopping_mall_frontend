@@ -5,6 +5,12 @@
                 <li><router-link to="/list/top">Top</router-link></li>
                 <li><router-link to="/list/bottom">Bottom</router-link></li>
             </div>
+            <div id = "title">
+                 <router-link to="/" style="text-decoration:none">
+                    Study Shoping Mall~!
+                </router-link>
+            </div>
+            
             <div class="div-all-basic">
                 <li >
                     <label v-if="isLogin">{{userName}}</label>
@@ -91,14 +97,29 @@
         list-style: none;
         display: inline;
         margin: 5px;
+        font-size: 15px;
     }
 
     .div-all-category {
-        margin: auto;
+        margin: 5% auto;
+        
     }
 
     a {
         /* HTML에선 router-link를 a 태그로 인식한다. */
         text-decoration: none;
     }
+
+#title {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #1186fb;
+  font-size: 30px;
+  margin:  5% auto;
+}
+nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
 </style>

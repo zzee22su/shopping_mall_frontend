@@ -1,7 +1,9 @@
 <template>
 
 <form class="row g-3" id="signup">
-  <p>회원 가입 신청</p>
+  <div style="text-align:center">
+    <p>회원 가입 신청</p>
+  </div>
  <div class="mb-3 row">
     <label for="inputId" class="col-sm-2 col-form-label">ID (email) *</label>
     <div class="col-sm-10">
@@ -68,7 +70,7 @@
       </label>
     </div>
   </div>
-  <div class="col-12">
+  <div class="col-12" style="text-align: center">
     <button type="button" class="btn btn-primary" @click="onSubmitSignUp">가입하기</button>
     </div>
    <div>     
@@ -231,10 +233,12 @@ export default {
       #signup {
         width: 800px;
         margin: auto;
+        font-size: 15px;
       }
+
       label {
         text-align: left;
-        font-size: 12px;
+        font-size: 15px;
       }
       #idCheck {
         color: red;

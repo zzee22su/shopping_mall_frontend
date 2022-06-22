@@ -2,11 +2,7 @@
   <div id="app">
     <Navigation/>
     <div class="contents">
-      <div id = "title">
-        <router-link to="/" style="text-decoration:none">
-        <p>Study Shoping Mall~!</p>
-        </router-link>
-      </div>
+
       <router-view></router-view>
     </div>
   </div>
@@ -34,22 +30,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+
   color: #2c3e50;
 }
-#title {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  font-size: 30px;
-}
+
 #title a.router-link-exact-active {
   color: #2c3e50;
 }

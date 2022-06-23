@@ -10,6 +10,8 @@
                         <div class="btn-group" role="group" aria-label="...">
                             <button type="button" class="btn btn-default" @click="addWishList">
                                 <img src="../assets/empty_heart.png" alt="../assets/logo.png"></button>
+                            <button v-if = isManager type="button" class="btn btn-default" v-on:click.stop="deleteProduct(item.id)" >
+                                <img src="../assets/delete.png" alt="../assets/logo.png" width = "40px" height = "40px"></button>
                         </div>
                     </div>
                 </div>
@@ -26,6 +28,7 @@
 <script>
 import ProductAPI from '@/api/ProductAPI';
 import Pagination from '../components/Pagination.vue';
+import LoginApi from '@/api/LoginApi';
 
 export default {
     data() {
@@ -39,6 +42,7 @@ export default {
             limit: 12,
             block: 5,
             hasImage:true,
+            isManager:false,
         }
     },
     components : {
@@ -101,6 +105,16 @@ export default {
                 params: { itemId: id }
             }).catch(() => {});  
         },
+        async deleteProduct(id) {
+            const result = await ProductAPI.deleteProduct(id);
+            console.log(result);
+            if(result.status === 200) {
+                alert("상품이 삭제되었습니다.");
+                this.pagingMethod(this.page);
+            } else {
+                 console.log("상품 삭제 실패.....");
+            }
+        },
 
         pagingMethod(page) {
         console.log("pagingMethod " + page);
@@ -135,6 +149,17 @@ export default {
           list.push(index)
         }
         return { first, end, list, currentPage }
+      },
+      async getUserInfoSet() {
+        let info = await LoginApi.getUserInfo();
+        if(info) {
+            console.log(info.data.data.email)
+            if (info.data.data.email === "xptmxm03@gmail.com") {
+                this.isManager = true;
+            } else {
+                this.isManager = false;
+            }
+        }
       }
     },
 
@@ -148,6 +173,7 @@ export default {
     created() {
         this.getItemList(this.page, this.limit);
         this.pagingMethod(this.page);
+        this.getUserInfoSet();
     },
 
     mounted() {

@@ -27,7 +27,13 @@ export default {
   getProductImage:(id) => {
     console.log("getProductImage " + id );
       return httpClient.get( `api/v1/img/${id}`)
-  }
+  },
+  // 상품 삭제하기
+
+  deleteProduct:(id) => {
+    console.log("deleteProduct" + id);
+    return httpClient.delete(`api/v1/product/${id}`)
+  },
 
  }
  

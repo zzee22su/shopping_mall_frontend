@@ -153,8 +153,18 @@ name: 'productContent',
         handleRemove (index) {
             this.fileList.splice(index, 1)
         },
+	
+        checkCotentImage() {
+            this.imgIDList.forEach((img, index, object) => {
+                 if (!this.editorData.includes('/api/v1/img/'+ img)) {
+                      this.imgIDList.splice(index, 1)
+                 }
+                 console.log("item : " + this.imgIDList)
+            })
+        },
 
        async saveOptionSet(option) {
+        this.checkCotentImage();
             console.log("saveOption parent....")
             let body =  `{ "name": "${this.productName}",
                 "price" : ${this.productPrice},
@@ -221,6 +231,7 @@ name: 'productContent',
       }
       .ck-editor__editable {
             min-height: 600px;
+            height: 600px;
        }
        #productAddFile {
             text-align: left;

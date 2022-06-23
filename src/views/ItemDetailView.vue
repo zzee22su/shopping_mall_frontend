@@ -17,21 +17,21 @@
                             </tr>
                             <tr>
                                 <th scope="row">옵션</th>
-                                <div v-for="option in itemDetail.options" :key="option.index">
+                                <div v-for="options in itemDetail.productionOptions" :key="options.index">
                                     <td>
-                                        <select class="form-select" aria-label="Default select example" @change="change">
-                                            <option selected="selected">{{ defaultMsg }}</option>
-                                            <option :value="option.name">{{ option.name }}</option>
+                                        <select class="form-select" aria-label="Default select example" @change="requiredOption">
+                                            <option selected>{{ defaultMsg }}</option>
+                                            <option v-for="options in itemDetail.productionOptions" :key="options.index" :value="options.name">{{ options.name }}</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <select class="form-select" aria-label="Default select example">
-                                            <option selected="selected">----------</option>
+                                        <select class="form-select" aria-label="Default select example" @change="selectedOption">
+                                            <option selected>{{ defaultMsg }}</option>
                                             <option 
-                                                v-for="types in option.optionType" 
+                                                v-for="types in options.optionType" 
                                                 :key="types.index" 
-                                                :value="types.index"
-                                                v-show="selectedOption">
+                                                :value="types.type"
+                                                v-show="isRequiredOption">
                                                 {{ types.type }}
                                                 {{ types.price }}원
                                             </option>
@@ -92,10 +92,11 @@ export default {
                 price: '', //가격
                 deliveryCost: '', //배송비
                 point: '', //적립금
-                options: [] //상품옵션
+                productionOptions: [] //상품옵션
             },
             defaultMsg:'[필수] 옵션을 선택해주세요.',
-            selectedOption: false
+            isRequiredOption: false,
+            test: ''
         }
     },
 
@@ -112,14 +113,29 @@ export default {
                 this.itemDetail.price = itemData.price;
                 this.itemDetail.deliveryCost = itemData.deliveryCost;
                 this.itemDetail.point = itemData.point;
-                this.itemDetail.options = itemData.productionOptions;
+                this.itemDetail.productionOptions = itemData.productionOptions;
             }
         },
 
-        change(event) {
-            if(event.target.value !== this.defaultMsg) {
-                this.selectedOption = true;
+        requiredOption(event) {
+            console.log("필수 옵션 값 : "+event.target.value);
+            if(event.target.value === this.defaultMsg) {
+                this.isRequiredOption = false;
+                this.selectedOption(event);
+            } else {
+                this.isRequiredOption = true;
+            } 
+        },
+
+        selectedOption(event) {
+            console.log("하위 옵션 값 : "+event.target.value);
+            if(event.target.value === this.defaultMsg) {
+                this.isRequiredOption = false;
             }
+        },
+
+        justClick(event) {
+            console.log("테스트 : "+event.target.value);
         }
     }
 }

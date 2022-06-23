@@ -33,6 +33,7 @@
                                                 :value="types.index"
                                                 v-show="selectedOption">
                                                 {{ types.type }}
+                                                {{ types.price }}원
                                             </option>
                                         </select>
                                     </td>

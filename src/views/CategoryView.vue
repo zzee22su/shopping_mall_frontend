@@ -151,14 +151,17 @@ export default {
         return { first, end, list, currentPage }
       },
       async getUserInfoSet() {
-        let info = await LoginApi.getUserInfo();
-        if(info) {
-            console.log(info.data.data.email)
-            if (info.data.data.email === "xptmxm03@gmail.com") {
-                this.isManager = true;
-            } else {
-                this.isManager = false;
-            }
+         let token = sessionStorage.getItem("accessToken");
+        if (token != null) {
+            let info = await LoginApi.getUserInfo();
+            if(info) {
+                console.log(info.data.data.email)
+                if (info.data.data.email === "xptmxm03@gmail.com") {
+                    this.isManager = true;
+                } else {
+                    this.isManager = false;
+                }
+            } 
         }
       }
     },
@@ -171,6 +174,8 @@ export default {
     },
 
     created() {
+        console.log("created");
+        this.getUserInfoSet();
         this.getItemList(this.page, this.limit);
         this.pagingMethod(this.page);
         this.getUserInfoSet();

@@ -37,6 +37,10 @@
 
 <script>
 export default {
+    name: 'productionOption',
+    props:{
+    optionsList:Array
+  },
     data() {
         return {
             index:0,
@@ -103,8 +107,27 @@ export default {
             console.log(JSON.stringify( this.optionsave));
             this.$emit('saveOption',this.optionsave);
         },
+    },
     
+    watch: {
+        optionsList : {
+            handler() {
+                console.log("watch optionsList" );
+                console.log(JSON.stringify(this.optionsList));
+                let subOption = [];
+                    this.optionsList.forEach((options, index, object) =>{
+
+                        options.optionType.forEach((detailOption, idx, obj) =>{
+                            subOption.push({key:idx, value:detailOption.type , price:detailOption.price })
+                    })
+                    this.optionList.push({key:index, otpionName:options.name, optionType: subOption});
+                    subOption = [];
+                })
+            }
+            
+        }
     }
+
 }
 
 </script>

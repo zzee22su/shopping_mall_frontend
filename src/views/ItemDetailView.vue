@@ -15,29 +15,13 @@
                                 <th scope="row">배송비</th>
                                 <td>{{ itemDetail.deliveryCost }}</td>
                             </tr>
-                            <tr>
-                                <th scope="row">옵션</th>
-                                <div v-for="options in itemDetail.productionOptions" :key="options.index">
-                                    <td>
-                                        <select class="form-select" aria-label="Default select example" @change="requiredOption">
-                                            <option selected>{{ defaultMsg }}</option>
-                                            <option v-for="options in itemDetail.productionOptions" :key="options.index" :value="options.name">{{ options.name }}</option>
+                            <tr scope="row" v-for="options in itemDetail.productionOptions" :key="options.index">
+                                <th scopd="row">{{ options.name }}</th>
+                                    <td >
+                                        <select>
+                                            <option v-for="types in options.optionType" :key="types.index" :value="types.price">{{ types.type }} {{ types.price+'원' }}</option>
                                         </select>
                                     </td>
-                                    <td>
-                                        <select class="form-select" aria-label="Default select example" @change="selectedOption">
-                                            <option selected>{{ defaultMsg }}</option>
-                                            <option 
-                                                v-for="types in options.optionType" 
-                                                :key="types.index" 
-                                                :value="types.type"
-                                                v-show="isRequiredOption">
-                                                {{ types.type }}
-                                                {{ types.price }}원
-                                            </option>
-                                        </select>
-                                    </td>
-                                </div>
                             </tr>
                             <tr>
                                 <th scope="row">합계</th>
@@ -114,6 +98,7 @@ export default {
                 this.itemDetail.deliveryCost = itemData.deliveryCost;
                 this.itemDetail.point = itemData.point;
                 this.itemDetail.productionOptions = itemData.productionOptions;
+                console.log('옵션 값: '+JSON.stringify(this.itemDetail.productionOptions));
             }
         },
 
@@ -132,10 +117,6 @@ export default {
             if(event.target.value === this.defaultMsg) {
                 this.isRequiredOption = false;
             }
-        },
-
-        justClick(event) {
-            console.log("테스트 : "+event.target.value);
         }
     }
 }

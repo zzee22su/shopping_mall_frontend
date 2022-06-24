@@ -170,7 +170,7 @@ name: 'productContent',
                 "price" : ${this.productPrice},
                 "deliveryCost" : ${this.deliveryCost},
                 "point" : ${this.point},
-                "productionOptions": [${option}],
+                "productionOptions":  ${JSON.stringify(option)},
                 "category" : "${this.category}",
                 "content" :  ${JSON.stringify(this.editorData)},
                 "contentImgList" : ${JSON.stringify(this.imgIDList)}

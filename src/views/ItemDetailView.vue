@@ -18,8 +18,8 @@
                             <tr scope="row" v-for="options in itemDetail.productionOptions" :key="options.index">
                                 <th scopd="row">{{ options.name }}</th>
                                     <td >
-                                        <select v-model="test" @change="selectedOption">
-                                            <option selected>{{ defaultMsg }}</option>
+                                        <select v-model="test"  @change="selectedOption">
+                                            <option disabled value="">{{ defaultMsg }}</option>
                                             <option v-for="types in options.optionType" :key="types.index" :value="types.type" >{{ types.type }} {{ '(+'+types.price+'원)' }}</option>
                                         </select>
                                     </td>
@@ -27,9 +27,8 @@
                             <!-- 옵션 선택 시, 표시 됌. -->
                             <tr>
                                 <td>{{ itemDetail.name }}<br>
-                                <!-- TODO:  -->
+                                <!-- FIXME:  -->
                                     {{ test }}
-                                <!-- TODO:  -->
                                 </td>
                                 <td>
                                     <div class="d-grid gap-2 d-md-block">
@@ -45,11 +44,6 @@
                                 <td>{{ totalPrice }}</td>
                             </tr>
                         </tbody>
-
-
-<div>
-</div>
-
                         <div class="d-grid gap-2">
                             <button class="btn btn-primary" type="button">바로구매</button>
                         </div>

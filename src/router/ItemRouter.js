@@ -13,10 +13,18 @@ const TopDetailRoute = {
   } 
 };
 
+const ProductEdit = {
+  path: 'productEdit/:itemId',
+  name: 'item-edit',
+  components: {
+    list: () => import('@/views/product/EditProductDetail.vue')
+  } 
+};
+
 export default {
     path: '/list',
     name: 'item-list',
     component: () => import('@/views/ItemListView'),
-    children: [TopRoute, TopDetailRoute]
+    children: [TopRoute, TopDetailRoute, ProductEdit]
 };
 

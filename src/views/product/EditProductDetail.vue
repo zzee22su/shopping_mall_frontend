@@ -1,6 +1,5 @@
 <template>
-
-<form class="row g-3 " id = 'shopadd'>
+<form class="row g-3 " id = 'shopEdit'>
     <div class="mb-3">
         <label id = 'producttitle'>Title을 입력하세요.</label>
         <input type="text" class="form-control" id="form-title" placeholder="title...." v-model="productName">
@@ -27,21 +26,19 @@
                 <option value="침대*프레임">침대*프레임</option>
             </select>
         </div>
-        <product-option ref="product_option" @saveOption ="saveOptionSet" />
+        <product-option ref="product_option"  :optionsList="optionList" />
     
         <!-- eslint-disable-next-line vue/no-multiple-template-root-->
     <div id="productContent">
          <ckeditor :editor="editor" v-model="editorData" :config="editorConfig" ></ckeditor>
     </div>
-    <div class="col-10">
-        <input id="input" type="file" ref="fileInput" class="file-upload-input" @change="fileChange" accept="image/*"  multiple/>
          <!-- 업로드된 리스트 -->
-        <div class="file-upload-list" id = "productAddFile">
-            <div class="file-upload-list__item" v-for="(file, index) in fileList" :key="index">
+        <div class="file-upload-list" >
+            <div class="file-upload-list__item" v-for= "file in fileList" :key="file.id" id = "prodluctAttechfile">
                 <div class="file-upload-list__item__data">
-                <img class="file-upload-list__item__data-thumbnail" :src="file.src">
-                <div class="file-upload-list__item__data-name">
-                    {{ file.name }}
+                     <img  :src ="imageSrc(file.id)"  width="100" height="100"/>
+                    <div class="file-upload-list__item__data-name">
+                    {{ file.filename }}
                 </div>
                 </div>
                 <button class="file-upload-list__item__btn-remove" @click="handleRemove(index)">
@@ -49,22 +46,36 @@
                 </button>
             </div>
         </div>
+    <div class="col-10">
+        <input id="input" type="file" ref="fileInput" class="file-upload-input" @change="fileChange" accept="image/*"  multiple/>
+         <!-- 업로드된 리스트 -->
+        <div class="file-upload-list" id = "productAddFile">
+            <div class="file-upload-list__item" v-for="(files, index) in addFileList" :key="index">
+                <div class="file-upload-list__item__data">
+                <img class="file-upload-list__item__data-thumbnail" :src="files.src">
+                <div class="file-upload-list__item__data-name">
+                    {{ files.name }}
+                </div>
+                </div>
+                <button class="file-upload-list__item__btn-remove" @click="handleRemoveaddfile(index)">
+                    X
+                </button>
+            </div>
+        </div>
     </div>
     <div class="col-10">
-        <button type="button" class="btn btn-primary" @click="onAddProduct">상품등록하기</button>
+        <button type="button" class="btn btn-primary">수정 내용 저장</button>
     </div>
 </form>
 </template>
 
 <script>
-import ProductOption from '../components/ProductOption.vue';
+import ProductOption from '../../components/ProductOption.vue';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-import UploadAdapter from '../js/UploadAdapter'
-import ProductAPI from '../api/ProductAPI';
+import UploadAdapter from '../../js/UploadAdapter'
+import ProductAPI from '../../api/ProductAPI';
+
 export default {
-
-
-name: 'productContent',
     data() {
         return {
             editor: ClassicEditor,
@@ -72,9 +83,6 @@ name: 'productContent',
             editorConfig: {
                extraPlugins: [this.MyCustomUploadAdapterPlugin],
                ckfinder: {                // Upload the images to the server using the CKFinder QuickUpload command.
-                //uploadUrl: "https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json",
-                //바로 업로드 주소를 설정 할 경우 위와 같이 설정한다. 우리 프로젝트에서는 custom uploader를 사용한다.
-                // Define the CKFinder configuration (if necessary).
                 options: {
                     resourceType: "Images"
                     },
@@ -94,50 +102,73 @@ name: 'productContent',
             file_name:'',
             fileList:[],
             imgIDList:[],
-            imageID:''          
+            imageID:'',
+            productInfo:'' ,
+            productID:'',
+            imgList:[],
+            addFileList:[],
+            deleteFileList:[],
         };
     },
     components : {
         ProductOption,
     },
-    methods :{
+    props : {
+
+    },
+     methods :{
          MyCustomUploadAdapterPlugin(editor) {
                 console.log("MyCustomUploadAdapterPlugin");
                 editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
                 return new UploadAdapter(loader)
             }
         },
-        
-        onAddProduct() {
-            if (!this.productName) {
-                alert("제목을 입력 하세요.");
-                return;
-            } else if (!this.productPrice) {
-                alert("가격을 입력 하세요.");
-                return;
-            } else if (!this.deliveryCost) {
-                alert("배송비를 입력 하세요.");
-                return;
-            } else if (!this.point) {
-                alert("적립금을 입력 하세요.");
-                return;
+        async getProductInfo(id) {
+            console.log("product Id : " + id);
+            const result = await ProductAPI.getProduct(id);
+            console.log(result);
+            if (result.data.status === 200) {
+                console.log(JSON.stringify(result.data.data));
+                this.productInfo = result.data.data;
+                this.productName = this.productInfo.name;
+                this.productPrice =  this.productInfo.price;
+                this.deliveryCost =  this.productInfo.deliveryCost;
+                this.point =  this.productInfo.point;
+                this.editorData = this.productInfo.content;
+                this.imgList = this.productInfo.imgList;
+                this.optionList = this.productInfo.productionOptions;
             }
-            console.log("상품등록하기~!");
-            this.$refs.product_option.saveOption();
+            this.filterImageList();    
         },
-        categorySelect(event) {
-            console.log(event.target.value);
-            this.category = event.target.value;
+        filterImageList() {
+            if(this.imgIDList) {
+                this.imgList.forEach(image => {
+                    console.log(JSON.stringify(image))
+                    console.log("contentImage : " + image.contentImg);
+                    if (image.contentImg === 1) {
+                        this.imgIDList.push(image)
+                    } else {
+                        image.src = 
+                        this.fileList.push(image);
+                        console.log(`/api/v1/img/${image.id}`);
+                    }
+                });
+            }
         },
+        imageSrc(id){
+            return "/api/v1/img/" + id
+        },
+
         fileChange(event) {
             const files = event.target.files
             this.addFiles(files)
         },
        async addFiles (files) {
             for(let i = 0; i < files.length; i++) {
-                const src = await this.readFiles(files[i])
-                files[i].src = src
-                this.fileList.push(files[i])
+                const src = await this.readFiles(files[i]);
+                files[i].src = src;
+                this.addFileList.push(files[i]);
+                
             }
         },
         // FileReader를 통해 파일을 읽어 thumbnail 영역의 src 값으로 셋팅
@@ -150,73 +181,27 @@ name: 'productContent',
                 reader.readAsDataURL(files)
             })
         },
+
         handleRemove (index) {
-            this.fileList.splice(index, 1)
+            this.deleteFileList.push(this.fileList[index]);
+            this.fileList.splice(index, 1);
         },
-	
-        checkCotentImage() {
-            this.imgIDList.forEach((img, index, object) => {
-                 if (!this.editorData.includes('/api/v1/img/'+ img)) {
-                      this.imgIDList.splice(index, 1)
-                 }
-                 console.log("item : " + this.imgIDList)
-            })
+         handleRemoveaddfile (index) {
+            this.addFileList.splice(index, 1)
         },
+     },
 
-       async saveOptionSet(option) {
-        this.checkCotentImage();
-            console.log("saveOption parent....")
-            let body =  `{ "name": "${this.productName}",
-                "price" : ${this.productPrice},
-                "deliveryCost" : ${this.deliveryCost},
-                "point" : ${this.point},
-                "productionOptions":  ${JSON.stringify(option)},
-                "category" : "${this.category}",
-                "content" :  ${JSON.stringify(this.editorData)},
-                "contentImgList" : ${JSON.stringify(this.imgIDList)}
-            }`
-            let formData = new FormData();
-
-            formData.append('productInfo', body);
-             if (this.fileList.length > 0) {
-                 this.fileList.forEach((file) => {
-                     console.log("file name " + file.name);
-                     formData.append('files',file );
-                 });
-             }
-
-            let result = await ProductAPI.saveProduct(formData);
-
-            // 상품 저장 한 후 새로고침 하여 데이터 저장.
-             if (result.status === 200) {
-
-                 alert("상품이 등록 되었습니다.");
-                 console.log("Dialog closed");
-                 location.replace('/addShop');
-             } else {
-                  alert("상품 등록 실패.....");
-                 console.log("상품 등록 실패.....")
-            }
-
-        },
-
-    },
-   
-    created() {
-        this.index = 0;
-    },
-    updated() {
-        if (this.imageID !== sessionStorage.getItem("imgId")) {
-            this.imageID = sessionStorage.getItem("imgId");
-            this.imgIDList.push (this.imageID)
-            console.log(this.imgIDList);
-        }
-    }
+     created () {
+        this.productID = this.$route.params.itemId;
+        console.log("product Id : " + this.productID);
+        this.getProductInfo(this.productID);
+     }
 }
 </script>
 
+
 <style>
- #shopadd {
+#shopEdit {
         width: 1000px;
         margin: auto;
       }
@@ -235,5 +220,10 @@ name: 'productContent',
        }
        #productAddFile {
             text-align: left;
+       }
+       #prodluctAttechfile {
+         display: inline;
+         float:left;
+         margin: 10px;
        }
 </style>

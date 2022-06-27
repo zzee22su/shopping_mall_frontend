@@ -8,10 +8,12 @@
                          <img v-if = !item.hasImg  src= "../assets/logo.png"   width="300" height="300" alt="../assets/logo.png" >
                             <h4>{{ item.title }}</h4>
                         <div class="btn-group" role="group" aria-label="...">
-                            <button type="button" class="btn btn-default" @click="addWishList">
+                            <button type="button" class="btn btn-default" v-on:click.stop="addWishList">
                                 <img src="../assets/empty_heart.png" alt="../assets/logo.png"></button>
                             <button v-if = isManager type="button" class="btn btn-default" v-on:click.stop="deleteProduct(item.id)" >
                                 <img src="../assets/delete.png" alt="../assets/logo.png" width = "40px" height = "40px"></button>
+                            <button  v-if = isManager type="button" class="btn btn-default" v-on:click.stop="editViewOpen(item.id)" >
+                                <img src="../assets/icon_edit.png" alt="../assets/logo.png" width = "30px" height = "30px"></button>    
                         </div>
                     </div>
                 </div>
@@ -42,7 +44,7 @@ export default {
             limit: 12,
             block: 5,
             hasImage:true,
-            isManager:false,
+            isManager:true,
         }
     },
     components : {
@@ -83,10 +85,12 @@ export default {
         },
 
         showCategory() {
+            console.log("show category")
             const category = this.$route.params.category;
             if(category === 'top' || category === 'bottom') {
                 this.showList = this.items.filter(item => item.category === category);
             }
+            
         },
 
         addWishList() {
@@ -105,6 +109,16 @@ export default {
                 params: { itemId: id }
             }).catch(() => {});  
         },
+
+        editViewOpen(id) {
+            console.log('상품아이디 : ' +id);
+            this.$router.push({
+                name: 'item-edit',
+                params: { itemId: id }
+            }).catch(() => {});  
+
+        },
+
         async deleteProduct(id) {
             const result = await ProductAPI.deleteProduct(id);
             console.log(result);
@@ -159,7 +173,7 @@ export default {
                 if (info.data.data.email === "xptmxm03@gmail.com") {
                     this.isManager = true;
                 } else {
-                    this.isManager = false;
+                    this.isManager = true;
                 }
             } 
         }
@@ -178,7 +192,7 @@ export default {
         this.getUserInfoSet();
         this.getItemList(this.page, this.limit);
         this.pagingMethod(this.page);
-        this.getUserInfoSet();
+       
     },
 
     mounted() {

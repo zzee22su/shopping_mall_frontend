@@ -1,33 +1,35 @@
 <template>
-<div>
-      <div class="row mb-3" v-for="(item, index) in optionList" :key="index">
+<div class="col-10">
+    <div v-for="(item, index) in optionList" :key="index">
+      <div class="row mb-3" >
         <label class="col-sm-1 col-form-label">옵션명</label>
         <div class="col-sm-3">
             <input type="text" class="form-control" id="optionTitle" v-model = "item.otpionName">
         </div>
 
         <div class="col-sm-3">
-            <button type="button" class="btn btn-light" @click="adddetailOption">옵션 내용추가하기(ADD)</button>
+            <button type="button" class="btn btn-light" @click="adddetailOption(index)">옵션 내용추가하기(ADD)</button>
         </div>
          <div class="col-sm-1">
-            <button type="button" class="btn btn-light"  @click="deletedetailOption(index)">옵션삭제하기(X)</button>
+            <button type="button" class="btn btn-light" @click="deletedetailOption(index)">옵션삭제하기(X)</button>
         </div>
       </div>
-      <div   class="row mb-10" v-for="(subItem, subindex) in suboptionList" :key="subindex+'l'" id="subOption">
-            <label  class="col-sm-2 col-form-label">옵션내용</label>
-            <div class="col-sm-3">
-                <input type="text" class="form-control" id="optionValue" v-model = "subItem.value" >
-            </div>
-            <label  class="col-sm-2 col-form-label">옵션가격</label>
-            <div class="col-sm-3">
-                <input type="text" class="form-control" id="optionPrice" v-model = "subItem.price" >
-            </div>
-            <div class="col-sm-1">
-                <button type="button" class="btn btn-light" @click="deletedetailOption2(subindex)">X</button>
-            </div>
+        <div   class="row mb-10" v-for="(subItem, subindex) in optionList[index].optionType" :key="subindex+'l'" id="subOption">
+                <label  class="col-sm-2 col-form-label">옵션내용</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" id="optionValue" v-model = "subItem.value" >
+                </div>
+                <label  class="col-sm-2 col-form-label">옵션가격</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" id="optionPrice" v-model = "subItem.price" >
+                </div>
+                <div class="col-sm-1">
+                    <button type="button" class="btn btn-light" @click="deletedetailOption2(index, subindex)">X</button>
+                </div>
+        </div>
      </div>
      <div class="col-10">
-        <button type="button" class="btn btn-primary" @click="onAddOption" v-if="index === 0">옵션 추가하기</button>
+        <button type="button" class="btn btn-primary" @click="onAddOption">옵션 추가하기</button>
      </div>
     </div>
    
@@ -35,37 +37,44 @@
 
 <script>
 export default {
+    name: 'productionOption',
+    props:{
+    optionsList:Array
+  },
     data() {
         return {
             index:0,
             subindex:0,
             optionList:[],
             suboptionList:[],
-            suboptionsave:[],
+            optionsave:[],
             otpionName:'',
-            value:'',
-            price:'',
+            value:' ',
+            price:'0',
 
         }
     },
     methods : {
-        adddetailOption() {
-            console.log("add detail option....");
-            this.subindex = this.suboptionList.length;
-            console.log(typeof(this.subindex) +  this.subindex);
-            this.suboptionList.push({
+
+        adddetailOption(index) {
+            console.log("add detail option...." + index);
+            this.optionList[index].optionType.push({
                 key: this.subindex,
                 value: this.value,
                 price: this.price,
             });
-        },        
+            this.subindex = this.subindex +1
+        },
+        
+        
         onAddOption() {
             console.log("onAddOption");
-            this.index = +1;
             this.optionList.push({
                 key: this.index,
                 otpionName:this.otpionName,
+                optionType:[], 
             });
+        this.index = this.index + 1;
              console.log(this.optionList);
         },
 
@@ -73,56 +82,52 @@ export default {
         deletedetailOption (index) {
             console.log(index);
             this.optionList.splice(index, 1);
-            this.suboptionList.splice(0, this.suboptionList.length);
-            console.log(this.optionList);
             this.index = 0;
             this.subindex = 0;
         },
 
-        deletedetailOption2 (subindex) {
+        deletedetailOption2 (index, subindex) {
             console.log("subindex" + subindex);
-            this.suboptionList.splice(subindex, 1);
+            this.optionList[index].optionType.splice(subindex, 1);
             console.log(this.suboptionList);
         },
-
         saveOption() {
             console.log("saveOption   ---- ");
-            let checkOptionValue = true;
-            let name = '';
-            this.optionList.forEach(optionList => {
-                name =  optionList.otpionName;
-            })
-            if (!name) {
-                alert("옵션 이름이 없습니다. 다시 확인해주세요.");
-                return;
-            }
-            this.suboptionList.some(suboptionList => {
-                if (suboptionList.value && suboptionList.price) {
-                    this.suboptionsave.push({type : suboptionList.value, price : suboptionList.price})
-                } else {
-                   alert("옵션에 빈 값이 있습니다. 확인해 주세요.false");
-                   checkOptionValue = false;
-                   return true;
-                }
-            });
-            if (checkOptionValue === false) {
-                return;
-            }
-
-            console.log(JSON.stringify( this.suboptionsave));
-
-
+            let subOption = [];
             
-            let body ;
-             body =  `{
-                "name": "${name}",
-                "optionValues": ${JSON.stringify( this.suboptionsave)}
-            }` 
-            console.log(body);
-            this.$emit('saveOption',body);
+             this.optionList.forEach((optionList, index, object) => {
+                 this.optionList[index].optionType.forEach(suboption => {
+                    subOption.push({type : suboption.value, price : suboption.price})
+                })
+                this.optionsave.push({name : optionList.otpionName, optionValues : subOption})
+                subOption = [];
+            })
+
+
+            console.log(JSON.stringify( this.optionsave));
+            this.$emit('saveOption',this.optionsave);
         },
+    },
     
+    watch: {
+        optionsList : {
+            handler() {
+                console.log("watch optionsList" );
+                console.log(JSON.stringify(this.optionsList));
+                let subOption = [];
+                    this.optionsList.forEach((options, index, object) =>{
+
+                        options.optionType.forEach((detailOption, idx, obj) =>{
+                            subOption.push({key:idx, value:detailOption.type , price:detailOption.price })
+                    })
+                    this.optionList.push({key:index, otpionName:options.name, optionType: subOption});
+                    subOption = [];
+                })
+            }
+            
+        }
     }
+
 }
 
 </script>

@@ -18,7 +18,7 @@
                             <tr scope="row" v-for="options in itemDetail.productionOptions" :key="options.index">
                                 <th scopd="row">{{ options.name }}</th>
                                     <td >
-                                        <select v-model="test"  @change="selectedOption">
+                                        <select v-model="selected"  @change="selectedOption">
                                             <option disabled value="">{{ defaultMsg }}</option>
                                             <option v-for="types in options.optionType" :key="types.index" :value="types.type" >{{ types.type }} {{ '(+'+types.price+'원)' }}</option>
                                         </select>
@@ -27,8 +27,7 @@
                             <!-- 옵션 선택 시, 표시 됌. -->
                             <tr>
                                 <td>{{ itemDetail.name }}<br>
-                                <!-- FIXME:  -->
-                                    {{ test }}
+                                    {{ selected }}
                                 </td>
                                 <td>
                                     <div class="d-grid gap-2 d-md-block">
@@ -73,7 +72,7 @@ export default {
             defaultMsg:'[필수] 옵션을 선택해주세요.',
             isRequiredOption: false,
             totalPrice: 0,
-            test: ''
+            selected: ''
         }
     },
 

@@ -31,9 +31,9 @@
                                 </td>
                                 <td>
                                     <div class="d-grid gap-2 d-md-block">
-                                        <button class="btn btn-light" type="button">-</button>
-                                        <button class="btn btn-light" type="button">숫자표시</button>
-                                        <button class="btn btn-light" type="button">+</button>
+                                        <button class="btn btn-light" type="button" @click="minus">-</button>
+                                        <button class="btn btn-light" type="button">{{ count }}</button>
+                                        <button class="btn btn-light" type="button" @click="plus">+</button>
                                     </div>
                                 </td>
                                  <td>18,000원</td>
@@ -72,7 +72,8 @@ export default {
             defaultMsg:'[필수] 옵션을 선택해주세요.',
             isRequiredOption: false,
             totalPrice: 0,
-            selected: ''
+            selected: '',
+            count: 1
         }
     },
 
@@ -106,6 +107,22 @@ export default {
                 this.totalPrice = this.itemDetail.price + parseInt(event.target.value)
                 console.log("합계 :"+this.totalPrice);
             }
+        },
+
+        minus() {
+            if(this.count>1) {
+                this.count--;
+            }
+        }, 
+
+        plus() {
+            // 최대 주문 개수는 10개로 제한한다. 
+            if(this.count>=10) {
+                 alert('최대 주문 개수를 초과하였습니다.'); 
+            } else {
+                this.count++;
+            }
+            
         }
     }
 }

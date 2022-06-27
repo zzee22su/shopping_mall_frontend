@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="pageSetting.list.length" class="page-list">
+    <div v-if="pageSetting.list.length" class="page-list" id = "pageList">
       <!-- <chevrons-left-icon
         class="left-icon"
         v-if="pageSetting.first !== null"
@@ -44,7 +44,16 @@
 <style scoped>
 li {
     display: inline;
-    margin: 5px;
+    margin: 10px;
     font-size: 16pt;
 }
+#pageList {
+   text-align: center;
+}
+ li.active {
+  color: #42b983;
+}
+
+
+
 </style>

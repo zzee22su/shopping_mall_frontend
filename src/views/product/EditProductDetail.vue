@@ -23,10 +23,10 @@
                 <option selected value = "기타">기타</option>
                 <option value="수납정리">수납정리</option>
                 <option value="책상의자">책상*의자</option>
-                <option value="침대*프레임">침대*프레임</option>
+                <option value="침대프레임">침대*프레임</option>
             </select>
         </div>
-        <product-option ref="product_option"  :optionsList="optionList" />
+        <product-option ref="product_option"  :optionsList="optionList" @ediSaveOption ="saveEditProduct"/>
     
         <!-- eslint-disable-next-line vue/no-multiple-template-root-->
     <div id="productContent">
@@ -64,7 +64,7 @@
         </div>
     </div>
     <div class="col-10">
-        <button type="button" class="btn btn-primary">수정 내용 저장</button>
+        <button type="button" class="btn btn-primary" @click="editProductSave">수정 내용 저장</button>
     </div>
 </form>
 </template>
@@ -97,7 +97,7 @@ export default {
             deliveryCost:'',
             point:'',
             productName:'',
-            saveOption:'',
+            edifSaveOption:'',
             category:'',
             file_name:'',
             fileList:[],
@@ -137,6 +137,7 @@ export default {
                 this.editorData = this.productInfo.content;
                 this.imgList = this.productInfo.imgList;
                 this.optionList = this.productInfo.productionOptions;
+                this.category = this.productInfo.category;
             }
             this.filterImageList();    
         },
@@ -146,7 +147,7 @@ export default {
                     console.log(JSON.stringify(image))
                     console.log("contentImage : " + image.contentImg);
                     if (image.contentImg === 1) {
-                        this.imgIDList.push(image)
+                        this.imgIDList.push(image.id)
                     } else {
                         image.src = 
                         this.fileList.push(image);
@@ -183,11 +184,63 @@ export default {
         },
 
         handleRemove (index) {
-            this.deleteFileList.push(this.fileList[index]);
+            this.deleteFileList.push(this.fileList[index].id);
             this.fileList.splice(index, 1);
         },
          handleRemoveaddfile (index) {
             this.addFileList.splice(index, 1)
+        },
+        editProductSave() {
+            
+             this.$refs.product_option.editsaveOption();
+        },
+        
+      async saveEditProduct(option) {
+            console.log("saveEditProduct parent....")
+            this.checkCotentImage();
+            let body =  `{ 
+                "id" :${this.productID},
+                "name": "${this.productName}",
+                "price" : ${this.productPrice},
+                "deliveryCost" : ${this.deliveryCost},
+                "point" : ${this.point},
+                "productionOptions":  ${JSON.stringify(option)},
+                "category" : "${this.category}",
+                "content" :  ${JSON.stringify(this.editorData)},
+                "contentImgList" : ${JSON.stringify(this.imgIDList)},
+                "deleteImgFileList" : ${JSON.stringify(this.deleteFileList)}
+            }`;
+            console.log(body);
+            let formData = new FormData();
+
+            formData.append('productInfo', body);
+             if (this.addFileList.length > 0) {
+                 this.addFileList.forEach((file) => {
+                     console.log("file name " + file.name);
+                     formData.append('files',file );
+                 });
+             }
+
+            let result = await ProductAPI.editProduct(formData);
+            
+            if (result.status === 200) {
+
+                  alert("상품이 등록 되었습니다.");
+                  console.log("Dialog closed");
+                  this.$router.go(-1);
+             } 
+        },
+
+        checkCotentImage() {
+            this.imgIDList.forEach((img, index, object) => {
+                 if (!this.editorData.includes('/api/v1/img/'+ img)) {
+                      this.imgIDList.splice(index, 1)
+                 }
+            })
+        },
+        categorySelect(event) {
+            console.log(event.target.value);
+            this.category = event.target.value;
         },
      },
 
@@ -195,7 +248,14 @@ export default {
         this.productID = this.$route.params.itemId;
         console.log("product Id : " + this.productID);
         this.getProductInfo(this.productID);
-     }
+     },
+      updated() {
+        if (this.imageID !== sessionStorage.getItem("imgId")) {
+            this.imageID = sessionStorage.getItem("imgId");
+            this.imgIDList.push (this.imageID)
+            console.log(this.imgIDList);
+        }
+    }
 }
 </script>
 

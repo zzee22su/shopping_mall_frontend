@@ -2,8 +2,11 @@
     <div>
         <nav>
             <div class="div-all-category">
-                <li><router-link to="/list/top">Top</router-link></li>
-                <li><router-link to="/list/bottom">Bottom</router-link></li>
+                <li><router-link to="/list/all">전체</router-link></li>
+                <li><router-link to="/list/storage">수납정리</router-link></li>
+                <li><router-link to="/list/table">책상*의자</router-link></li>
+                <li><router-link to="/list/bad">침대*프레임</router-link></li>
+                <li><router-link to="/list/etc">기타</router-link></li>
             </div>
             <div id = "title">
                  <router-link to="/" style="text-decoration:none">

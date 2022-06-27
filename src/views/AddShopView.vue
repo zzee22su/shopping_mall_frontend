@@ -24,7 +24,7 @@
                 <option selected value = "기타">기타</option>
                 <option value="수납정리">수납정리</option>
                 <option value="책상의자">책상*의자</option>
-                <option value="침대*프레임">침대*프레임</option>
+                <option value="침대프레임">침대*프레임</option>
             </select>
         </div>
         <product-option ref="product_option" @saveOption ="saveOptionSet" />

@@ -2,11 +2,13 @@
     <div>
         <div class="container">
             <div class="row">
-                <div class="col-sm-3 col-md-3" v-for="item in showList" :key="item.id">
+                <div class="col-sm-3 col-md-3" v-for="item in items" :key="item.id">
                     <div class="thumbnail" @click="gotoDetail(item.id)">
-                        <img v-if = item.hasImg :src= "item.image"   width="300" height="300" alt="../assets/logo.png" >
+                        <img v-if = item.hasImg :src= "item.image"   width="250" height="250" alt="../assets/logo.png" id="imagedisplay">
                          <img v-if = !item.hasImg  src= "../assets/logo.png"   width="300" height="300" alt="../assets/logo.png" >
-                            <h4>{{ item.title }}</h4>
+                            <div id="titleArea">
+                                <h4>{{ item.title }}</h4>
+                            </div>
                         <div class="btn-group" role="group" aria-label="...">
                             <button type="button" class="btn btn-default" v-on:click.stop="addWishList">
                                 <img src="../assets/empty_heart.png" alt="../assets/logo.png"></button>
@@ -36,7 +38,7 @@ export default {
     data() {
         return {
             items: [],
-            showList: [this.items],
+            //showList: [this.items],
             productList:[],
             imgsrc:'',
             total: '',
@@ -53,9 +55,21 @@ export default {
 
     methods: {
         async getItemList(pageNo, pageSige) {
-                this.items = [];
-               const response =  await ProductAPI.getProductList(pageNo, pageSige);
-               console.log ( JSON.stringify(response.data.data));
+               this.items = [];
+               let response;
+               console.log(this.$route.params.category)
+               if(this.$route.params.category === 'storage') {
+                    response =  await ProductAPI.getProductList(pageNo, pageSige, "수납정리");
+               } else if(this.$route.params.category === 'table') {
+                    response =  await ProductAPI.getProductList(pageNo, pageSige, "책상의자");
+               } else if(this.$route.params.category === 'bad') {
+                    response =  await ProductAPI.getProductList(pageNo, pageSige, "침대프레임");
+               } else if(this.$route.params.category === 'etc') {
+                    response =  await ProductAPI.getProductList(pageNo, pageSige, "기타");
+               } else {
+                    response =  await ProductAPI.getProductListAll(pageNo, pageSige);
+               }
+
                this.productList = response.data.data.productList;
                this.total = response.data.data.totalCount;
                console.log("totalCount " + this.total);
@@ -67,14 +81,11 @@ export default {
                            image: this.imgSrc(product.imgList[0]),
                            hasImg : this.hasImage,
                            });
-                        console.log("item.image.... " + product.imgList[0]);
                         
                    });
-                   this.showCategory();
 
         },
         imgSrc(image) {
-           console.log("image " + image);
             if (image != null && image != undefined) {
                 this.hasImage = true;
                 return "/api/v1/img/" + image;
@@ -85,13 +96,9 @@ export default {
         },
 
         showCategory() {
-            console.log("show category")
-            const category = this.$route.params.category;
-            if(category === 'top' || category === 'bottom') {
-                this.showList = this.items.filter(item => item.category === category);
-            }
-            
-        },
+             console.log("show category")
+             this.getItemList(this.page, this.limit);
+         },
 
         addWishList() {
             if(!this.isLogin) {
@@ -132,10 +139,8 @@ export default {
 
         pagingMethod(page) {
         console.log("pagingMethod " + page);
-        // this.listData = this.paymentInfo.slice (
-        //   (page - 1) * this.limit,
-        //   page * this.limit
-        // )
+
+        sessionStorage.setItem("page", page);
         this.page = page
         console.log("total.." + this.total);
         if (this.total > 0) {
@@ -205,5 +210,17 @@ export default {
 </script>
 
 <style>
+#imagedisplay{
+    max-width: 300px;
+    max-height: 300px;
+    min-width: 300px;
+    min-height: 300px;
+}
+#titleArea {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin: 10px;
+}
 
 </style>

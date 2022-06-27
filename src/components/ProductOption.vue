@@ -107,6 +107,22 @@ export default {
             console.log(JSON.stringify( this.optionsave));
             this.$emit('saveOption',this.optionsave);
         },
+        editsaveOption() {
+            console.log("saveOption   ---- ");
+            let subOption = [];
+            
+             this.optionList.forEach((optionList, index, object) => {
+                 this.optionList[index].optionType.forEach(suboption => {
+                    subOption.push({type : suboption.value, price : suboption.price})
+                })
+                this.optionsave.push({name : optionList.otpionName, optionValues : subOption})
+                subOption = [];
+            })
+
+
+            console.log(JSON.stringify( this.optionsave));
+            this.$emit('ediSaveOption',this.optionsave);
+        }
     },
     
     watch: {

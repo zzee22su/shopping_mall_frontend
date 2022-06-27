@@ -6,7 +6,7 @@ const TopRoute = {
   };
 
 const TopDetailRoute = {
-  path: 'top/:itemId',
+  path: 'all/:itemId',
   name: 'item-detail',
   components: {
     list: () => import('@/views/ItemDetailView.vue')

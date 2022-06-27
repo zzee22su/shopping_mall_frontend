@@ -25,7 +25,7 @@
                                     </td>
                             </tr>
                             <!-- 옵션 선택 시, 표시 됌. -->
-                            <tr>
+                            <tr v-if="selected!=''">
                                 <td>{{ itemDetail.name }}<br>
                                     {{ selected }}
                                 </td>
@@ -37,6 +37,7 @@
                                     </div>
                                 </td>
                                  <td>18,000원</td>
+                                 <button class="btn btn-light" type="button" @click="remove">X</button>
                             </tr>
                             <tr>
                                 <th scope="row">합계</th>
@@ -116,13 +117,16 @@ export default {
         }, 
 
         plus() {
-            // 최대 주문 개수는 10개로 제한한다. 
             if(this.count>=10) {
                  alert('최대 주문 개수를 초과하였습니다.'); 
             } else {
                 this.count++;
             }
             
+        },
+
+        remove() {
+            this.selected = '';
         }
     }
 }

@@ -31,12 +31,12 @@
                                 </td>
                                 <td>
                                     <div class="d-grid gap-2 d-md-block">
-                                        <button class="btn btn-light" type="button" @click="minus">-</button>
-                                        <button class="btn btn-light" type="button">{{ count }}</button>
-                                        <button class="btn btn-light" type="button" @click="plus">+</button>
+                                        <button class="btn btn-light" type="button" @click="minus(option)">-</button>
+                                        <span>{{ option.count }}</span>
+                                        <button class="btn btn-light" type="button" @click="plus(option)">+</button>
                                     </div>
                                 </td>
-                                <td>{{ itemDetail.price + option.price}}</td>
+                                <td>{{ (itemDetail.price + option.price) * option.count}}</td>
                                 <button class="btn btn-light" type="button" @click="remove(i)">X</button>
                             </tr>
                             <tr>
@@ -73,8 +73,7 @@ export default {
             defaultMsg:'[필수] 옵션을 선택해주세요.',
             isRequiredOption: false,
             totalPrice: 0,
-            count: 1,
-            addedOptions: []
+            addedOptions: [],
         }
     },
 
@@ -97,36 +96,56 @@ export default {
                 this.itemDetail.deliveryCost = itemData.deliveryCost;
                 this.itemDetail.point = itemData.point;
                 this.itemDetail.productionOptions = itemData.productionOptions;
-                console.log("옵션값 : "+ JSON.stringify(this.itemDetail.productionOptions));
+
+                for(let i=0; i<this.itemDetail.productionOptions.length; i++) {
+                     console.log('for문 i : '+i);
+                    for(let j=0; j<this.itemDetail.productionOptions[i].optionType.length; j++) {
+                       this.itemDetail.productionOptions[i].optionType[j].count=1;
+                    }
+                }
+                console.log("옵션값 업데이트: "+ JSON.stringify(this.itemDetail.productionOptions));
             }
         },
 
         selectedOption(event, optionsIdx) {
             console.log('선택');
             let typesIdx = event.target.value;
-            const data = this.itemDetail.productionOptions[optionsIdx].optionType[typesIdx]
+            const data = this.itemDetail.productionOptions[optionsIdx].optionType[typesIdx];
             //TODO: 같은 옵션 값의 상품을 추가할 수 없도록 alert 메시지 추가해야 함.
             this.addedOptions.push(data);
             console.log('addedOptions: '+JSON.stringify(this.addedOptions));
+
+            //TODO: 총 합계 업데이트 
+            this.updateTotalPrice();
         },
 
-        minus() {
-            if(this.count>1) {
-                this.count--;
-            }
+        minus(option) {
+            // if(option.count>1) {
+                console.log('전 : '+option.count);
+                option.count--;
+                console.log('후 : '+option.count);
+            // }
         }, 
 
-        plus() {
-            if(this.count>=10) {
+        plus(option) {
+            if(option.count>=10) {
                  alert('최대 주문 개수를 초과하였습니다.'); 
             } else {
-                this.count++;
+                console.log('전 : '+option.count);
+                option.count++;
+                console.log('후 : '+option.count);
             }
             
         },
 
         remove(IdxOfaddedOptions) {
             this.addedOptions.pop(IdxOfaddedOptions);
+            //TODO: 총 합계 업데이트 
+            this.updateTotalPrice();
+        }, 
+
+        updateTotalPrice() {
+
         }
     }
 }

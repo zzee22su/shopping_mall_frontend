@@ -15,19 +15,19 @@
                                 <th scope="row">배송비</th>
                                 <td>{{ itemDetail.deliveryCost+'원' }}</td>
                             </tr>
-                            <tr scope="row" v-for="options in itemDetail.productionOptions" :key="options.index">
+                            <tr scope="row" v-for="(options, optionsIdx) in itemDetail.productionOptions" :key="optionsIdx">
                                 <th scopd="row">{{ options.name }}</th>
                                     <td >
-                                        <select v-model="selected"  @change="selectedOption">
-                                            <option disabled value="">{{ defaultMsg }}</option>
-                                            <option v-for="types in options.optionType" :key="types.index" :value="types.type" >{{ types.type }} {{ '(+'+types.price+'원)' }}</option>
+                                        <select @change="selectedOption($event, optionsIdx)">
+                                            <option selected disabled value="">{{ defaultMsg }}</option>
+                                            <option v-for="(types, typedsIdx) in options.optionType" :key="typedsIdx" :value="typedsIdx" >{{ types.type }} {{ '(+'+types.price+'원)' }}</option>
                                         </select>
                                     </td>
                             </tr>
                             <!-- 옵션 선택 시, 표시 됌. -->
-                            <tr v-if="selected!=''">
+                            <tr v-show="addedOptions!=''" v-for="(option, i) in addedOptions" :key="i+1">
                                 <td>{{ itemDetail.name }}<br>
-                                    {{ selected }}
+                                    {{ option.type }}
                                 </td>
                                 <td>
                                     <div class="d-grid gap-2 d-md-block">
@@ -36,8 +36,8 @@
                                         <button class="btn btn-light" type="button" @click="plus">+</button>
                                     </div>
                                 </td>
-                                 <td>18,000원</td>
-                                 <button class="btn btn-light" type="button" @click="remove">X</button>
+                                <td>{{ itemDetail.price + option.price}}</td>
+                                <button class="btn btn-light" type="button" @click="remove(i)">X</button>
                             </tr>
                             <tr>
                                 <th scope="row">합계</th>
@@ -73,8 +73,8 @@ export default {
             defaultMsg:'[필수] 옵션을 선택해주세요.',
             isRequiredOption: false,
             totalPrice: 0,
-            selected: '',
-            count: 1
+            count: 1,
+            addedOptions: []
         }
     },
 
@@ -97,17 +97,17 @@ export default {
                 this.itemDetail.deliveryCost = itemData.deliveryCost;
                 this.itemDetail.point = itemData.point;
                 this.itemDetail.productionOptions = itemData.productionOptions;
-                console.log(itemData);
+                console.log("옵션값 : "+ JSON.stringify(this.itemDetail.productionOptions));
             }
         },
 
-        selectedOption(event) {
-            console.log("옵션 값 : "+JSON.stringify(event.target));
-            if(event.target.value != this.defaultMsg) {
-                this.isRequiredOption = true;
-                this.totalPrice = this.itemDetail.price + parseInt(event.target.value)
-                console.log("합계 :"+this.totalPrice);
-            }
+        selectedOption(event, optionsIdx) {
+            console.log('선택');
+            let typesIdx = event.target.value;
+            const data = this.itemDetail.productionOptions[optionsIdx].optionType[typesIdx]
+            //TODO: 같은 옵션 값의 상품을 추가할 수 없도록 alert 메시지 추가해야 함.
+            this.addedOptions.push(data);
+            console.log('addedOptions: '+JSON.stringify(this.addedOptions));
         },
 
         minus() {
@@ -125,8 +125,8 @@ export default {
             
         },
 
-        remove() {
-            this.selected = '';
+        remove(IdxOfaddedOptions) {
+            this.addedOptions.pop(IdxOfaddedOptions);
         }
     }
 }

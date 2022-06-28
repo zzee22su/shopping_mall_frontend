@@ -71,7 +71,6 @@ export default {
                 productionOptions: [] //상품옵션
             },
             defaultMsg:'[필수] 옵션을 선택해주세요.',
-            isRequiredOption: false,
             totalPrice: 0,
             addedOptions: [],
         }
@@ -98,7 +97,6 @@ export default {
                 this.itemDetail.productionOptions = itemData.productionOptions;
 
                 for(let i=0; i<this.itemDetail.productionOptions.length; i++) {
-                     console.log('for문 i : '+i);
                     for(let j=0; j<this.itemDetail.productionOptions[i].optionType.length; j++) {
                        this.itemDetail.productionOptions[i].optionType[j].count=1;
                     }
@@ -111,6 +109,7 @@ export default {
             console.log('선택');
             let typesIdx = event.target.value;
             const data = this.itemDetail.productionOptions[optionsIdx].optionType[typesIdx];
+
             //TODO: 같은 옵션 값의 상품을 추가할 수 없도록 alert 메시지 추가해야 함.
             this.addedOptions.push(data);
             console.log('addedOptions: '+JSON.stringify(this.addedOptions));

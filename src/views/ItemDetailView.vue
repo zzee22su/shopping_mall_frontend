@@ -31,9 +31,9 @@
                                 </td>
                                 <td>
                                     <div class="d-grid gap-2 d-md-block">
-                                        <button class="btn btn-light" type="button" @click="minus(option)">-</button>
+                                        <button class="btn btn-light" type="button" @click="minus(addedOptions, i)">-</button>
                                         <span>{{ option.count }}</span>
-                                        <button class="btn btn-light" type="button" @click="plus(option)">+</button>
+                                        <button class="btn btn-light" type="button" @click="plus(addedOptions, i)">+</button>
                                     </div>
                                 </td>
                                 <td>{{ (itemDetail.price + option.price) * option.count}}</td>
@@ -118,23 +118,23 @@ export default {
             this.updateTotalPrice();
         },
 
-        minus(option) {
-            // if(option.count>1) {
-                console.log('전 : '+option.count);
-                option.count--;
-                console.log('후 : '+option.count);
-            // }
+        minus(addedOptions, idx) {
+            const temp = addedOptions[idx];
+            let userCount = temp.count;
+            if(userCount>1) {
+                userCount--;
+                this.$delete(temp, 'count');
+                this.$set(addedOptions[idx], 'count', userCount);
+            }
+           
         }, 
 
-        plus(option) {
-            if(option.count>=10) {
-                 alert('최대 주문 개수를 초과하였습니다.'); 
-            } else {
-                console.log('전 : '+option.count);
-                option.count++;
-                console.log('후 : '+option.count);
-            }
-            
+        plus(addedOptions, idx) {
+            const temp = addedOptions[idx];
+            let userCount = temp.count;
+            userCount++;
+            this.$delete(temp, 'count');
+            this.$set(addedOptions[idx], 'count', userCount);
         },
 
         remove(IdxOfaddedOptions) {

@@ -106,13 +106,14 @@ export default {
         },
 
         selectedOption(event, optionsIdx) {
-            console.log('선택');
             let typesIdx = event.target.value;
             const data = this.itemDetail.productionOptions[optionsIdx].optionType[typesIdx];
-
-            //TODO: 같은 옵션 값의 상품을 추가할 수 없도록 alert 메시지 추가해야 함.
-            this.addedOptions.push(data);
-            console.log('addedOptions: '+JSON.stringify(this.addedOptions));
+        
+            if(this.addedOptions.find((item) => item.type === data.type)){
+               alert('이미 추가한 상품입니다.');
+            } else {
+                this.addedOptions.push(data);
+            }
 
             //TODO: 총 합계 업데이트 
             this.updateTotalPrice();
@@ -125,8 +126,7 @@ export default {
                 userCount--;
                 this.$delete(temp, 'count');
                 this.$set(addedOptions[idx], 'count', userCount);
-            }
-           
+            }     
         }, 
 
         plus(addedOptions, idx) {

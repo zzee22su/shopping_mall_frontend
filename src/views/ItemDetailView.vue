@@ -101,7 +101,6 @@ export default {
                        this.itemDetail.productionOptions[i].optionType[j].count=1;
                     }
                 }
-                console.log("옵션값 업데이트: "+ JSON.stringify(this.itemDetail.productionOptions));
             }
         },
 

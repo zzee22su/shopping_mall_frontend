@@ -113,8 +113,6 @@ export default {
             } else {
                 this.addedOptions.push(data);
             }
-
-            //TODO: 총 합계 업데이트 
             this.updateTotalPrice();
         },
 
@@ -125,25 +123,38 @@ export default {
                 userCount--;
                 this.$delete(temp, 'count');
                 this.$set(addedOptions[idx], 'count', userCount);
-            }     
+            }   
+            this.updateTotalPrice();  
         }, 
 
         plus(addedOptions, idx) {
             const temp = addedOptions[idx];
             let userCount = temp.count;
-            userCount++;
-            this.$delete(temp, 'count');
-            this.$set(addedOptions[idx], 'count', userCount);
+
+            if(userCount < 10) {
+                userCount++;
+                this.$delete(temp, 'count');
+                this.$set(addedOptions[idx], 'count', userCount);
+            } else {
+                alert('주문 가능한 개수를 초과하였습니다.');
+            }
+
+            this.updateTotalPrice();
         },
 
         remove(IdxOfaddedOptions) {
             this.addedOptions.pop(IdxOfaddedOptions);
-            //TODO: 총 합계 업데이트 
             this.updateTotalPrice();
         }, 
 
         updateTotalPrice() {
+            this.totalPrice = 0;
+            let tempPrice = 0;
 
+            for(let i=0; i<this.addedOptions.length; i++) {
+                tempPrice += (this.itemDetail.price + this.addedOptions[i].price) * this.addedOptions[i].count;
+            } 
+            this.totalPrice = tempPrice;
         }
     }
 }
